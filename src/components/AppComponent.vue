@@ -1,29 +1,37 @@
-<script setup lang="ts">
-import {appTitle} from "@/env.d";
+<script lang="ts" setup>
+import {$title} from "@/env.d";
 import {routes} from "@/router";
 
-import NavComponent from "@/components/NavComponent.vue"
+import NavComponent from "@Components/NavComponent.vue"
+import ProfileComponent from "@Components/ProfileComponent.vue";
+import {useUserStore} from "@/stores/UserStore";
+
+const userStore = useUserStore()
 
 </script>
 
 <template>
-  <NavComponent :routes="routes">
+  <NavComponent :routes="routes" title="ChadGpt Workout">
     <template #header>
       <div class="flex h-auto items-center border-b-4 border-dotted">
-        <img :alt="appTitle" class="w-auto" src="/img/alphomega.png"/>
+        <img :alt="$title" class="w-auto" src="/img/alphomega.png"/>
       </div>
+    </template>
+
+    <template #profile>
+      <ProfileComponent v-if="userStore.state.jwtToken"/>
     </template>
 
     <template #main>
       <main>
-        <div>
-          <div>
-            <router-view/>
-          </div>
+        <div class="m-20">
+          <router-view/>
         </div>
       </main>
     </template>
   </NavComponent>
+
+
 </template>
 
 <style scoped></style>

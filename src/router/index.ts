@@ -1,22 +1,11 @@
-import { Route } from '@assets/models/route';
-import {
-    HomeIcon,
-    UserIcon,
-    UserCircleIcon
-} from '@heroicons/vue/24/outline'
+import {Route} from '@assets/models/route';
+import {HomeIcon, UserIcon} from '@heroicons/vue/24/outline'
 
 const resolveComponent = (component: string) => {
     return () => import(`@Views/${component}.vue`)
 }
 
 export const routes: Route[] = [
-    {
-        path: '/profile',
-        name: 'Profile',
-        icon: UserCircleIcon,
-        display: true,
-        component: resolveComponent('UserPage')
-    },
     {
         path: '/',
         name: 'Home',

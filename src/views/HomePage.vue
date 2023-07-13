@@ -1,14 +1,10 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 
 
 </script>
 
 <template>
 
-  <div class="grid grid-cols-3">
-    <div>§</div>
-    <div>§</div>
-    <div>§</div>
-  </div>
+  <h1 class="text-xl font-bold font-mono text-center">Home</h1>
 
 </template>
