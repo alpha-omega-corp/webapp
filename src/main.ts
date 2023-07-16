@@ -12,12 +12,14 @@ const router: Router = createRouter({
     routes,
 });
 
+function hasToken(): boolean {
+    return userStore.state.jwtToken != null
+}
+
 router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
     userGuard()
 
-    if (to.name !== 'Login' && userStore.state.jwtToken == null)
-        next({name: 'Login'})
-
+    if (to.name !== 'Login' && to.name !== 'Register' && !hasToken()) next({name: 'Login'})
     else next()
 })
 
