@@ -6,6 +6,7 @@ import {routes} from '@/router'
 import {userKey, userStore} from "@/stores/UserStore";
 import {createRouter, createWebHistory, NavigationGuardNext, RouteLocationNormalized, Router} from "vue-router";
 import {userGuard} from "@/guards";
+import {getCookies} from "@/env.d";
 
 const router: Router = createRouter({
     history: createWebHistory(),
@@ -13,7 +14,7 @@ const router: Router = createRouter({
 });
 
 function hasToken(): boolean {
-    return userStore.state.jwtToken != null
+    return getCookies()['JWT-TOKEN'] !== undefined
 }
 
 router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {

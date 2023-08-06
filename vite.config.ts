@@ -27,13 +27,7 @@ export default defineConfig(({mode}) => {
             open: true,
             cors: true,
             strictPort: true,
-            proxy: {
-                '/api': {
-                    target: 'http://127.0.0.1:8001/api',
-                    changeOrigin: true,
-                    rewrite: (path) => path.replace(/^\/api/, '')
-                }
-            },
+         
             build: {
                 outDir: './dist',
                 assetsDir: './src',

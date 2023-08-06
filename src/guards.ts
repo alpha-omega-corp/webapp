@@ -1,13 +1,14 @@
 import {AxiosResponse} from "axios";
 import {User} from "@assets/models/user";
-import {$userToken, getCookies} from "@/env.d";
-import {apiGet} from "@/axios";
+import {getCookies} from "@/env.d";
+import {apiPost} from "@/axios";
 
 export const userGuard = (): void => {
-    if (!sessionStorage.getItem('user') && getCookies()['JWT-TOKEN']) {
-        apiGet<User>('/validate', {
+    const token = getCookies()['JWT-TOKEN']
+    if (!sessionStorage.getItem('user') && token) {
+        apiPost<User>('/validate', {
             headers: {
-                "Authorization": 'Bearer ' + $userToken
+                "Authorization": 'Bearer ' + token
             }
         }).then((res: AxiosResponse<User>): void => {
             sessionStorage.setItem('user', JSON.stringify(res.data))
