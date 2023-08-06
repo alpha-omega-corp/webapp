@@ -18,8 +18,7 @@ function hasToken(): boolean {
 
 router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
     userGuard()
-
-    if (to.name !== 'Login' && to.name !== 'Register' && !hasToken()) next({name: 'Login'})
+    if (to.name !== 'Login' && !hasToken()) next({name: 'Login'})
     else next()
 })
 

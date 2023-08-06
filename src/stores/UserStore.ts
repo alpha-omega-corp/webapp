@@ -13,6 +13,7 @@ const createSession = (data: Authentication): void => {
     let d: Date = new Date();
     d.setTime((d.getTime() + 1) * 24 * 60 * 60 * 1000);
     let expires: string = "expires=" + d.toUTCString();
+
     document.cookie = "JWT-TOKEN=" + data.token + ";" + expires + ";path=/" + ";SameSite=None;Secure";
     sessionStorage.setItem("user", JSON.stringify(data.user))
 }

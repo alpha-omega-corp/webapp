@@ -1,8 +1,8 @@
 import {User} from "@assets/models/user";
 
 interface Authentication {
-    user: User
     token: string
+    user: User
 }
 
 export type {Authentication}

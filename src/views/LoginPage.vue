@@ -14,7 +14,7 @@ const router = useRouter()
 const userStore = useUserStore()
 
 const onSubmit = () => {
-  apiPost<Authentication>('/api/login', {
+  apiPost<Authentication>('/login', {
     email: email.value,
     password: password.value
   }).then((res: AxiosResponse<Authentication>) => {
