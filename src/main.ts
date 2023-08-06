@@ -5,7 +5,6 @@ import {createApp} from 'vue'
 import {routes} from '@/router'
 import {userKey, userStore} from "@/stores/UserStore";
 import {createRouter, createWebHistory, NavigationGuardNext, RouteLocationNormalized, Router} from "vue-router";
-import {userGuard} from "@/guards";
 import {getCookies} from "@/env.d";
 
 const router: Router = createRouter({
@@ -18,8 +17,8 @@ function hasToken(): boolean {
 }
 
 router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
-    userGuard()
-    if (to.name !== 'Login' && !hasToken()) next({name: 'Login'})
+    const token: string | null = userStore.state.jwtToken
+    if (to.name !== 'Login' && !token) next({name: 'Login'})
     else next()
 })
 

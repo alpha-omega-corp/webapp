@@ -14,7 +14,7 @@ const userStore = useUserStore()
   <NavComponent :routes="routes" title="ChadGpt Workout">
     <template #header>
       <div class="flex h-auto items-center border-b-4 border-dotted">
-        <img :alt="$title" class="w-auto" src="/img/alphomega.png"/>
+        <img :alt="$title" class="w-auto" src="../assets/images/alphomega.png"/>
       </div>
     </template>
 

@@ -4,7 +4,7 @@ import {$host} from "@/env.d";
 
 const request = (options?: AxiosRequestConfig) => axios.create({
     baseURL: $host,
-
+    
     ...(options ? options : {}),
 });
 
