@@ -3,7 +3,7 @@
 import {ref} from "vue";
 import {useRouter} from "vue-router";
 import {Authentication} from "@assets/models/authentication";
-import {useUserStore} from "@/stores/UserStore";
+import {createSession, useUserStore} from "@/stores/UserStore";
 import {apiPost} from "@/axios";
 import {AxiosResponse} from "axios";
 
@@ -18,7 +18,7 @@ const onSubmit = () => {
     email: email.value,
     password: password.value
   }).then((res: AxiosResponse<Authentication>) => {
-    userStore.commit('login', res.data)
+    createSession(res.data)
     router.push('/')
   })
 }

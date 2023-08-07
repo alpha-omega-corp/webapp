@@ -9,13 +9,14 @@ export interface State {
 
 export const userKey: InjectionKey<Store<State>> = Symbol()
 
-const createSession = (data: Authentication): void => {
+export const createSession = (data: Authentication): void => {
     let d: Date = new Date();
     d.setTime((d.getTime() + 1) * 24 * 60 * 60 * 1000);
     let expires: string = "expires=" + d.toUTCString();
 
     document.cookie = "JWT-TOKEN=" + data.token + ";" + expires + ";path=/" + ";SameSite=None;Secure";
-    sessionStorage.setItem("user", JSON.stringify(data.user))
+    sessionStorage.setItem('user', JSON.stringify(data.user))
+    sessionStorage.setItem('token', JSON.stringify(data.token))
 }
 
 const deleteSession = (): void => {
@@ -31,7 +32,6 @@ export const userStore: Store<State> = createStore<State>({
     },
     mutations: {
         login(state: State, auth: Authentication): void {
-            createSession(auth)
             state.jwtToken = auth.token
         },
         logout(state: State): void {
