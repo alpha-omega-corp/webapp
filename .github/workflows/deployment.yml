@@ -1,0 +1,30 @@
+name: deployment
+on: [push]
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: deploy to web server
+      uses: appleboy/ssh-action@v1.0.0
+      env:
+        INPUT_NAME: ${{ secrets.APP_WEB_NAME }}
+        INPUT_PATH: ${{ secrets.APP_WEB_PATH }}
+        INPUT_REPO: ${{ secrets.APP_WEB_REPO }}
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        port: ${{ secrets.SSH_PORT }}
+        script_stop: true
+        allenvs: true
+        script: |
+          export NVM_DIR=~/.nvm
+          source ~/.nvm/nvm.sh
+          cd $INPUT_PATH
+          if [ -d $INPUT_NAME ]; then cd $INPUT_NAME && git pull && cd ..; else git clone $INPUT_REPO; fi
+          cd $INPUT_NAME
+          npm install
+          echo "VITE_API_URL=https://api.alphomega.org" > .env
+          npm run build
+
