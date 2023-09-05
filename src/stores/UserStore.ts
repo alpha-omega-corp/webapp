@@ -1,6 +1,5 @@
 import {InjectionKey} from 'vue'
 import {createStore, Store, useStore as baseUseStore} from 'vuex'
-import {$userToken} from "@/env.d";
 import {Authentication} from "@assets/models/authentication";
 
 export interface State {
@@ -16,7 +15,7 @@ export const createSession = (data: Authentication): void => {
 
     document.cookie = "JWT-TOKEN=" + data.token + ";" + expires + ";path=/" + ";SameSite=None;Secure";
     sessionStorage.setItem('user', JSON.stringify(data.user))
-    sessionStorage.setItem('token', JSON.stringify(data.token))
+    sessionStorage.setItem('token', data.token)
 }
 
 const deleteSession = (): void => {
@@ -28,11 +27,11 @@ const deleteSession = (): void => {
 
 export const userStore: Store<State> = createStore<State>({
     state: {
-        jwtToken: $userToken
+        jwtToken: sessionStorage.getItem('token') ?? null
     },
     mutations: {
-        login(state: State, auth: Authentication): void {
-            state.jwtToken = auth.token
+        login(state: State, token: string): void {
+            state.jwtToken = token
         },
         logout(state: State): void {
             deleteSession()

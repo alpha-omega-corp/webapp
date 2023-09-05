@@ -19,6 +19,7 @@ const onSubmit = () => {
     password: password.value
   }).then((res: AxiosResponse<Authentication>) => {
     createSession(res.data)
+    userStore.commit('login', res.data.token)
     router.push('/')
   })
 }

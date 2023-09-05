@@ -16,8 +16,6 @@ export function getCookies() {
 
 export const environment: Environment = import.meta.env
 
-export const $cookies = getCookies()
-export const $userToken: string | null = $cookies['JWT-TOKEN']
 export const $title: string = environment.VITE_APP_TITLE
 export const $host: string = environment.VITE_API_URL
 
