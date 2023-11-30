@@ -23,7 +23,7 @@ export const routes: Route[] = [
     {
         path: '/register',
         name: 'Register',
-        icon: UserIcon,
+        icon: HomeIcon,
         display: false,
         component: resolveComponent('RegisterPage')
     },
