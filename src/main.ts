@@ -14,8 +14,7 @@ const router: Router = createRouter({
 
 router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
     const token: string | null = sessionStorage.getItem('token')
-    if (to.name !== 'Login' && !token) next({name: 'Login'})
-    else next()
+    next()
 })
 
 createApp(AppComponent)

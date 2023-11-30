@@ -27,4 +27,3 @@ jobs:
           npm install
           echo "VITE_API_URL=https://api.alphomega.org" > .env
           npm run build
-
