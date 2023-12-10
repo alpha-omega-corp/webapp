@@ -5,6 +5,7 @@ interface Route {
     path: string;
     component: Component;
     display: boolean,
+    props?: boolean,
     icon?: FunctionalComponent<HTMLAttributes & VNodeProps> | string
 }
 

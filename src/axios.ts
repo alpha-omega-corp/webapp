@@ -16,6 +16,10 @@ function apiPost<T>(url: string, data: object, options?: AxiosRequestConfig<T>):
     return request(options).post<T>(url, data)
 }
 
+function apiDelete<T>(url: string, options?: AxiosRequestConfig<T>): Promise<AxiosResponse<T, unknown>> {
+    return request(options).delete<T>(url, options)
+}
+
 function apiPostFormData<T>(url: string, data: FormData, options?: AxiosRequestConfig<T>): Promise<AxiosResponse<T, unknown>> {
     return request({
         headers: {
@@ -25,5 +29,5 @@ function apiPostFormData<T>(url: string, data: FormData, options?: AxiosRequestC
     }).post<T>(url, data)
 }
 
-export {apiGet, apiPost, apiPostFormData}
+export {apiGet, apiPost, apiDelete, apiPostFormData}
 

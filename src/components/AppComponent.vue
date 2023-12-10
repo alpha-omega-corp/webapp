@@ -13,13 +13,19 @@ const userStore = useUserStore()
 <template>
   <NavComponent :routes="routes" title="ALPHOMEGA">
     <template #header>
-      <div class="flex h-auto items-center border-b-4 border-dotted">
-        <img :alt="$title" class="w-auto" src="../assets/images/alphomega.png"/>
+      <div class="flex justify-center mt-10 border-b border-b-amber-600 pb-4">
+        <img :alt="$title" class="nav-logo" src="../assets/images/alphomega.png"/>
       </div>
     </template>
 
     <template #profile>
       <ProfileComponent v-if="userStore.state.jwtToken"/>
+      <div v-if="!userStore.state.jwtToken">
+        <router-link to="/login" class="text-gray-700 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
+          <span class="sr-only">Login</span>
+          Login
+        </router-link>
+      </div>
     </template>
 
     <template #main>
@@ -34,4 +40,8 @@ const userStore = useUserStore()
 
 </template>
 
-<style scoped></style>
+<style scoped>
+.nav-logo {
+  width: 100px;
+}
+</style>

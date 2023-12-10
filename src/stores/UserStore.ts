@@ -36,7 +36,7 @@ export const userStore: Store<State> = createStore<State>({
         logout(state: State): void {
             deleteSession()
             state.jwtToken = null
-        }
+        },
     }
 })
 
