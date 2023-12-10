@@ -21,6 +21,8 @@ apiGet<GetPackageResponse>('/package/' + packageId)
       item.makefile = atob(item.makefile)
       pkg.value = item
       gitPkg.value = item.git
+
+      console.log(item)
     }).catch((err: any) => {
   console.log(err)
 })

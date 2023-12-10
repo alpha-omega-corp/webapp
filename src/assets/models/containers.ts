@@ -21,6 +21,8 @@ interface Package {
     dockerfile: string
     makefile: string
     git: GithubPackage
+    pushed: boolean
+    imageName: string
 }
 
 interface GithubPackage {
