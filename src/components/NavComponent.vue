@@ -47,7 +47,7 @@ const sideBarOpen = ref<boolean>(false)
                     <li>
                       <ul class="-mx-2 space-y-1" role="list">
                         <li v-for="route in props.routes" :key="route.path">
-                          <router-link v-if="route.display"
+                          <router-link v-if="route.display" v-can="route.service + '.read'"
                                        :class="['text-gray-700 hover:text-indigo-600 hover:bg-gray-50', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']"
                                        :to="route.path" @click="sideBarOpen = false">
 

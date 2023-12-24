@@ -8,13 +8,14 @@ export interface State {
 
 export const userKey: InjectionKey<Store<State>> = Symbol()
 
-export const createSession = (data: Authentication): void => {
+export const createSession = (data: Authentication, permMatrix: object): void => {
     let d: Date = new Date();
     d.setTime((d.getTime() + 1) * 24 * 60 * 60 * 1000);
     let expires: string = "expires=" + d.toUTCString();
 
     document.cookie = "JWT-TOKEN=" + data.token + ";" + expires + ";path=/" + ";SameSite=None;Secure";
     sessionStorage.setItem('user', JSON.stringify(data.user))
+    sessionStorage.setItem('permissions', JSON.stringify(permMatrix))
     sessionStorage.setItem('token', data.token)
 }
 

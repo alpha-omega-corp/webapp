@@ -1,5 +1,5 @@
 <script setup>
-defineProps([
+const props = defineProps([
     'value',
     'type',
     'label',
@@ -21,7 +21,7 @@ defineEmits(['update:value'])
     <div class="mt-2">
       <input
           :type="type"
-          :value="value"
+          :value="props.value"
           @input="$emit('update:value', $event.target.value)"
           :id="id"
           :placeholder="placeholder"

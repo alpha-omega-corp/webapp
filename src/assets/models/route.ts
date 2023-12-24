@@ -1,11 +1,11 @@
 import type { Component, FunctionalComponent, HTMLAttributes, VNodeProps } from "vue"
 
 interface Route {
-    name: string;
-    path: string;
-    component: Component;
-    display: boolean,
-    props?: boolean,
+    service: string
+    path: string
+    component: Component
+    name?: string
+    display?: boolean
     icon?: FunctionalComponent<HTMLAttributes & VNodeProps> | string
 }
 

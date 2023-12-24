@@ -4,8 +4,10 @@ import {ref} from "vue";
 import {useRouter} from "vue-router";
 import {Authentication} from "@assets/models/authentication";
 import {createSession, useUserStore} from "@/stores/UserStore";
-import {apiPost} from "@/axios";
+import {apiGet, apiPost} from "@/axios";
 import {AxiosResponse} from "axios";
+import {User} from "@assets/models/user";
+import {GetPermMatrixResponse} from "@assets/models/permissions";
 
 const email = ref<string>()
 const password = ref<string>()
@@ -18,9 +20,16 @@ const onSubmit = () => {
     email: email.value,
     password: password.value
   }).then((res: AxiosResponse<Authentication>) => {
-    createSession(res.data)
     userStore.commit('login', res.data.token)
-    router.push('/')
+
+    apiGet<GetPermMatrixResponse>(`/user/${res.data.user.id}/permissions`)
+        .then((permRes: AxiosResponse<GetPermMatrixResponse>) => {
+          createSession(res.data, permRes.data.matrix)
+          router.push('/')
+        })
+        .catch((err) => {
+          console.log(err)
+        })
   })
 }
 

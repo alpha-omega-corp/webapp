@@ -53,12 +53,13 @@ function modal(id: number): PackageModal {
     <li v-for="pkg in packages" :key="pkg.id"
         class="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow">
       <ModalComponent
+          type="danger"
           submitButton="Delete"
           @submit="deletePackage(pkg.id)"
           :open="modal(pkg.id).open"
           @close-modal="modal(pkg.id).open = false">
 
-        <div>ooo</div>
+        <h6>Confirm Package Removal?</h6>
       </ModalComponent>
 
       <div class="flex items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 p-6">
@@ -82,6 +83,7 @@ function modal(id: number): PackageModal {
                   </router-link>
                   <span class="sr-only">, {{ pkg.name }}</span>
                 </a>
+
               </MenuItem>
               <MenuItem v-slot="{ active }">
                 <a @click="modal(pkg.id).open = true" href="#" :class="[active ? 'bg-gray-50' : '', 'block px-3 py-1 text-sm leading-6 text-gray-900']">
