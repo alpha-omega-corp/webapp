@@ -5,8 +5,7 @@ import {AcademicCapIcon} from "@heroicons/vue/20/solid";
 import ButtonComponent from "@Components/ButtonComponent.vue";
 import UsersDropdownComponent from "@Components/UsersDropdownComponent.vue";
 import {ref} from "vue";
-import {User} from "@assets/models/user";
-import {Role} from "@assets/models/permissions";
+import {Role, User} from "@assets/models/permissions";
 import {apiPost} from "@/axios";
 
 const selectedUser = ref<User>()
@@ -41,16 +40,12 @@ const assignRole = () => {
       <UsersDropdownComponent @selected="selectUser"/>
     </div>
 
-    <div class="w-1/5 h-full">
-      <div class="flex justify-start content-end">
-        <div class="flex justify-end content-end">
-          <ButtonComponent
-              button-text="Assign"
-              @click="assignRole">
-            <AcademicCapIcon class="-ml-0.5 h-5 w-5" aria-hidden="true"/>
-          </ButtonComponent>
-        </div>
-      </div>
-    </div>
+
+      <ButtonComponent
+          button-text="Assign"
+          @click="assignRole">
+        <AcademicCapIcon class="-ml-0.5 h-5 w-5" aria-hidden="true"/>
+      </ButtonComponent>
+
   </div>
 </template>

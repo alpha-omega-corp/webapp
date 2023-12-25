@@ -20,8 +20,17 @@ const router: Router = createRouter({
     routes,
 });
 
-const canUserAccess = (to: RouteLocationNormalized) => {
+const setGuestPermissions = () => {
+    sessionStorage.setItem('permissions', JSON.stringify({
+        'home.read': true,
+        'docker.read': true,
+        'packages.read': true,
+    }))
+}
+
+const canUserAccess = (to: RouteLocationNormalized): boolean => {
     const permString = sessionStorage.getItem('permissions')
+
     if (permString) {
         const permissions = JSON.parse(permString)
         const filteredRoutes: Route[] = routes.filter((r: Route) => {
@@ -30,11 +39,17 @@ const canUserAccess = (to: RouteLocationNormalized) => {
 
         if (filteredRoutes[0]) {
             const service: string = filteredRoutes[0].service
+            if (service === 'guest') {
+                return true
+            }
+
             const canAccess = permissions[`${service}.read`]
             if (canAccess === undefined || !canAccess) {
                 return false
             }
         }
+    } else {
+        setGuestPermissions()
     }
     return true
 }
@@ -55,7 +70,6 @@ createApp(AppComponent)
     .component('VAceEditor', VAceEditor)
     .directive('can', {
         mounted(el, binding, node) {
-            console.log(binding.value)
             const permString = sessionStorage.getItem('permissions')
             if (permString) {
                 const permissions = JSON.parse(permString)

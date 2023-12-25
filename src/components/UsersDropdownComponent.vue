@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+
 import { computed, ref } from 'vue'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
 import {
@@ -9,9 +10,9 @@ import {
   ComboboxOption,
   ComboboxOptions,
 } from '@headlessui/vue'
-import {GetUsersResponse, User} from "@assets/models/user";
 import {apiGet} from "@/axios";
 import {AxiosResponse} from "axios";
+import {GetUsersResponse, User} from "@assets/models/permissions";
 
 defineEmits(['selected'])
 
@@ -25,7 +26,7 @@ apiGet<GetUsersResponse>('/users')
     })
 
 const query = ref('')
-const selectedUser = ref(null)
+const selectedUser = ref<User>()
 const filteredUsers = computed(() =>
     query.value === ''
         ? users.value
@@ -33,6 +34,7 @@ const filteredUsers = computed(() =>
           return user.email.toLowerCase().includes(query.value.toLowerCase())
         })
 )
+
 </script>
 
 <template>
@@ -43,7 +45,7 @@ const filteredUsers = computed(() =>
     <div class="relative mt-2">
       <ComboboxInput
           class="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-          @change="query = $event.target.value" :display-value="(user) => user?.email" />
+          @change="query = $event.target.value" :display-value="(user) => (user as User).email" />
 
       <ComboboxButton class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
         <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />

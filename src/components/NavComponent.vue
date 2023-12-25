@@ -4,7 +4,6 @@ import {Dialog, DialogPanel, TransitionChild, TransitionRoot} from "@headlessui/
 import {Bars3Icon, XMarkIcon} from "@heroicons/vue/24/outline";
 import {ref} from 'vue';
 
-
 const props = defineProps(['routes', 'title'])
 const sideBarOpen = ref<boolean>(false)
 

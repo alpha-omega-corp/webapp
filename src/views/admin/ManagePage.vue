@@ -5,9 +5,6 @@ import CreatePermissionComponent from "@Components/CreatePermissionComponent.vue
 import CreateRoleComponent from "@Components/CreateRoleComponent.vue";
 import AssignRoleComponent from "@Components/AssignRoleComponent.vue";
 import PermsTableComponent from "@Components/PermsTableComponent.vue";
-import {apiGet} from "@/axios";
-import {User} from "@assets/models/user";
-
 
 </script>
 
@@ -22,13 +19,16 @@ import {User} from "@assets/models/user";
           <div>
             <CreatePermissionComponent/>
           </div>
-          
-          <div class="w-full">
-            <PermsTableComponent/>
+          <div class="w-full ml-10">
+            <AssignRoleComponent/>
           </div>
         </div>
 
-      <AssignRoleComponent/>
+      <div class="mt-10">
+        <PermsTableComponent/>
+      </div>
+
+
       <UsersTableComponent/>
 
     </div>

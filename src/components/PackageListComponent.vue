@@ -63,7 +63,7 @@ function modal(id: number): PackageModal {
       </ModalComponent>
 
       <div class="flex items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 p-6">
-        <ArchiveBoxIcon class="h-6 w-6 text-gray-400" aria-hidden="true" />
+        <ArchiveBoxIcon class="h-6 w-6 text-gray-400" :class="[pkg.synced ? 'text-green-500': '']" aria-hidden="true" />
         <div class="text-sm font-medium leading-6 text-gray-900">{{ pkg.name }}:{{pkg.tag}}</div>
         <Menu as="div" class="relative ml-auto">
           <MenuButton class="-m-2.5 block p-2.5 text-gray-400 hover:text-gray-500">
@@ -73,7 +73,6 @@ function modal(id: number): PackageModal {
           <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
             <MenuItems class="absolute right-0 z-10 mt-0.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
               <MenuItem v-slot="{ active }">
-
 
                 <a :class="[active ? 'bg-gray-50' : '', 'block px-3 py-1 text-sm leading-6 text-gray-900']">
                   <router-link :to="'/packages/' + pkg.id + '/inspect'">

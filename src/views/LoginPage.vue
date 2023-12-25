@@ -6,7 +6,6 @@ import {Authentication} from "@assets/models/authentication";
 import {createSession, useUserStore} from "@/stores/UserStore";
 import {apiGet, apiPost} from "@/axios";
 import {AxiosResponse} from "axios";
-import {User} from "@assets/models/user";
 import {GetPermMatrixResponse} from "@assets/models/permissions";
 
 const email = ref<string>()

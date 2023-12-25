@@ -34,7 +34,26 @@ interface Role {
     active: boolean;
 }
 
+interface GetUsersResponse {
+    users: User[];
+}
+
+interface User {
+    id: number;
+    email: string;
+    name: string;
+    roles: Role[];
+}
 
 
 
-export type {Permission, Role, Service, GetRolesResponse, GetServicesResponse, GetPermissionsResponse, GetPermMatrixResponse}
+export type {
+    Permission,
+    Role,
+    Service,
+    User,
+    GetUsersResponse,
+    GetRolesResponse,
+    GetServicesResponse,
+    GetPermissionsResponse,
+    GetPermMatrixResponse}

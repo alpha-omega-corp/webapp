@@ -1,35 +1,40 @@
 <script lang="ts" setup>
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import 'ace-builds/src-noconflict/mode-dockerfile';
 import 'ace-builds/src-noconflict/theme-twilight';
 
+const props = defineProps<{
+  content?: string
+  name: string
+}>()
 
-const props = defineProps([
-    'inputName',
-    'inputValue'
-])
-const emits = defineEmits([
-    "editorInput"
-])
+defineEmits(['update:content'])
 
-const content = ref<string>('')
+
 const editor = ref<AceAjax.Editor>()
+const contentValue = props.content || ''
+
 const initEditor = () => {
-  editor.value = ace.edit("editor");
+  editor.value = ace.edit(props.name);
+  editor.value?.setValue(props.content || '', -1)
 }
 
 </script>
 
 <template>
-  <v-ace-editor
-      id="editor"
-      :value="inputValue ?? ''"
-      @change="$emit('editorInput', content)"
-      v-model:value="content"
-      @init="initEditor"
-      theme="twilight"
-      lang="dockerfile"
-  />
+  <template v-if="content">
+
+    <v-ace-editor
+        :id="props.name"
+        @init="initEditor"
+        @change="$emit('update:content', contentValue)"
+        v-model:value="contentValue"
+        theme="twilight"
+        lang="dockerfile"
+    />
+
+  </template>
+
 </template>
 
 <style>

@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 const props = defineProps([
     'value',
     'type',
@@ -10,6 +10,7 @@ const props = defineProps([
 ])
 
 defineEmits(['update:value'])
+
 </script>
 
 <template>
@@ -22,7 +23,7 @@ defineEmits(['update:value'])
       <input
           :type="type"
           :value="props.value"
-          @input="$emit('update:value', $event.target.value)"
+          @input="$emit('update:value', ($event.target as HTMLInputElement).value)"
           :id="id"
           :placeholder="placeholder"
           :aria-describedby="aria"

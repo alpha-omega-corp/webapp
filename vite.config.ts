@@ -19,7 +19,6 @@ export default defineConfig(({mode}) => {
                 {find: '@Views', replacement: fileURLToPath(new URL('./src/views', import.meta.url))},
                 {find: '@assets', replacement: fileURLToPath(new URL('./src/assets', import.meta.url))},
                 {find: '@stores', replacement: fileURLToPath(new URL('./src/stores', import.meta.url))},
-
             ]
         },
         server: {
@@ -32,7 +31,8 @@ export default defineConfig(({mode}) => {
                 outDir: './dist',
                 assetsDir: './src',
             }
-        }
+        },
+
     }
 })
 

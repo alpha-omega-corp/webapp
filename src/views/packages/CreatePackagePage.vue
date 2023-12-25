@@ -46,7 +46,7 @@ function toFile() {
   <h1 class="text-center font-bold uppercase mb-10">New Container</h1>
 
   <div class="mb-10">
-    <EditorComponent @editor-input="editorCallback"/>
+    <EditorComponent name="editor" input-value="" @editor-input="editorCallback"/>
 
     {{editorContent}}
   </div>

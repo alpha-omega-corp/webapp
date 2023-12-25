@@ -12,6 +12,7 @@ interface SimplePackage {
     id: number
     tag: string
     name: string
+    synced: boolean
 }
 
 interface Package {
@@ -20,8 +21,8 @@ interface Package {
     name: string
     dockerfile: string
     makefile: string
+    synced: boolean
     git: GithubPackage
-    pushed: boolean
     imageName: string
 }
 
@@ -32,6 +33,7 @@ interface GithubPackage {
     version: number
     visibility: string
     url: string
+    htmlUrl: string
     ownerId: string
     ownerName: string
     ownerNode: string

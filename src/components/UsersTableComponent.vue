@@ -1,13 +1,11 @@
 <script lang="ts" setup>
 
 import {ref} from "vue";
-import {GetUsersResponse, User} from "@assets/models/user.js";
 import {apiGet, apiPost} from "@/axios.js";
 import {AxiosResponse} from "axios";
 import ModalComponent from "@Components/ModalComponent.vue";
 import InputComponent from "@Components/InputComponent.vue";
-import RolesDropdownComponent from "@Components/RolesDropdownComponent.vue";
-import {Role} from "@assets/models/permissions";
+import {GetUsersResponse, Role, User} from "@assets/models/permissions";
 import RoleBadgeComponent from "@Components/RoleBadgeComponent.vue";
 
 interface UserModal {
@@ -19,7 +17,7 @@ const users = ref<User[]>([])
 const modals = ref<UserModal[]>([])
 
 const updateTable = () => {
-  apiGet<GetUsersResponse>('/users')
+  apiGet<GetUsersResponse >('/users')
       .then((res: AxiosResponse<GetUsersResponse>) => {
         users.value = res.data.users
         modals.value = users.value.map((user: User) => {

@@ -17,7 +17,6 @@ export const routes: Route[] = [
         display: true,
         component: resolveComponent('HomePage'),
     },
-
     {
         service: 'docker',
         path: '/docker',
@@ -31,14 +30,13 @@ export const routes: Route[] = [
         path: '/docker/container/:id/logs',
         component: resolveComponent('ContainerLogsPage')
     },
-
     {
         service: 'packages',
         path: '/packages',
         name: 'Packages',
         icon: ArchiveBoxIcon,
         display: true,
-        component: resolveComponent('PackagesPage', 'packages')
+        component: resolveComponent('ManagePage', 'packages')
     },
     {
         service: 'packages',
@@ -50,7 +48,6 @@ export const routes: Route[] = [
         path: '/packages/create',
         component: resolveComponent('CreatePackagePage', 'packages')
     },
-
     {
         service: 'admin',
         path: '/admin',
@@ -59,7 +56,6 @@ export const routes: Route[] = [
         display: true,
         component: resolveComponent('ManagePage', 'admin')
     },
-
     {
         service: 'guest',
         path: '/login',
