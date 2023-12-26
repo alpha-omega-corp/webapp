@@ -19,12 +19,14 @@ apiGet<GetPackagesResponse>('/packages')
     .then((res: AxiosResponse<GetPackagesResponse>) => {
       packages.value = res.data.packages
 
-      modals.value = packages.value.map((pkg: SimplePackage) => {
-        return {
-          id: pkg.id,
-          open: ref<boolean>(false)
-        } as unknown as PackageModal
-      })
+      if (packages.value) {
+        modals.value = packages.value.map((pkg: SimplePackage) => {
+          return {
+            id: pkg.id,
+            open: ref<boolean>(false)
+          } as unknown as PackageModal
+        })
+      }
 
     }).catch((err: any) => {
   console.log(err)

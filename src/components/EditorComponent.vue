@@ -6,6 +6,7 @@ import 'ace-builds/src-noconflict/theme-twilight';
 const props = defineProps<{
   content?: string
   name: string
+  lang: string
 }>()
 
 defineEmits(['update:content'])
@@ -30,7 +31,7 @@ const initEditor = () => {
         @change="$emit('update:content', contentValue)"
         v-model:value="contentValue"
         theme="twilight"
-        lang="dockerfile"
+        :lang="lang"
     />
 
   </template>

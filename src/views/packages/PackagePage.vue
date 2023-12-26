@@ -126,7 +126,7 @@ const getDockerfile = (content: string) => {
             Dockerfile
           </dt>
           <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-            <EditorComponent name="editor" :content="pkg.dockerfile" @update:content="getDockerfile"/>
+            <EditorComponent name="editor" lang="dockerfile" :content="pkg.dockerfile" @update:content="getDockerfile"/>
           </dd>
         </div>
       </dl>

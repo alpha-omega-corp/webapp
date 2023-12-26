@@ -9,8 +9,8 @@ jobs:
       uses: appleboy/ssh-action@v1.0.0
       env:
         INPUT_NAME: ${{ secrets.APP_WEB_NAME }}
-        INPUT_PATH: ${{ secrets.APP_WEB_PATH }}
         INPUT_REPO: ${{ secrets.APP_WEB_REPO }}
+        INPUT_PATH: ${{ secrets.HTML_PATH }}
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}

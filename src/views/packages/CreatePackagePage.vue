@@ -39,6 +39,10 @@ function toFile() {
         console.log(err)
       })
 }
+
+const getEditorContent = (content: string) => {
+  editorContent.value = content
+}
 </script>
 
 <template>
@@ -46,9 +50,8 @@ function toFile() {
   <h1 class="text-center font-bold uppercase mb-10">New Container</h1>
 
   <div class="mb-10">
-    <EditorComponent name="editor" input-value="" @editor-input="editorCallback"/>
+    <EditorComponent name="editor" lang="dockerfile" content="CMD" @update:content="getEditorContent"/>
 
-    {{editorContent}}
   </div>
 
   <div class="flex">
