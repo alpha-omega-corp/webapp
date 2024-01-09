@@ -8,21 +8,21 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 import ModalComponent from "@Components/ModalComponent.vue";
 
 interface PackageModal {
-  id: number,
+  name: string,
   open: boolean
 }
 
 const packages = ref<SimplePackage[]>([])
 const modals = ref<PackageModal[]>([])
 
-apiGet<GetPackagesResponse>('/packages')
+apiGet<GetPackagesResponse>('/docker/packages')
     .then((res: AxiosResponse<GetPackagesResponse>) => {
       packages.value = res.data.packages
 
       if (packages.value) {
         modals.value = packages.value.map((pkg: SimplePackage) => {
           return {
-            id: pkg.id,
+            name: pkg.name,
             open: ref<boolean>(false)
           } as unknown as PackageModal
         })
@@ -32,41 +32,41 @@ apiGet<GetPackagesResponse>('/packages')
   console.log(err)
 })
 
-function deletePackage(id: number) {
-  apiDelete(`/package/${id}`)
+function deletePackage(name: string) {
+  apiDelete(`/docker/package/${name}`)
       .then((res) => {
-        const searchIndex = packages.value.findIndex((pkg: any) => pkg.id === id)
+        const searchIndex = packages.value.findIndex((pkg: SimplePackage) => pkg.name === name)
         packages.value.splice(searchIndex, 1)
-        modal(id).open = false
+        modal(name).open = false
       })
       .catch((err) => {
         console.log(err)
       })
 }
 
-function modal(id: number): PackageModal {
-  const searchIndex = modals.value.findIndex((pkg: any) => pkg.id === id)
+function modal(name: string): PackageModal {
+  const searchIndex = modals.value.findIndex((pkg: PackageModal) => pkg.name === name)
   return modals.value[searchIndex]
 }
 </script>
 
 <template>
   <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-    <li v-for="pkg in packages" :key="pkg.id"
+    <li v-for="pkg in packages" :key="pkg.name"
         class="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow">
       <ModalComponent
           type="danger"
-          submitButton="Delete"
-          @submit="deletePackage(pkg.id)"
-          :open="modal(pkg.id).open"
-          @close-modal="modal(pkg.id).open = false">
+          button="Delete"
+          :open="modal(pkg.name).open"
+          @submit="deletePackage(pkg.name)"
+          @close="modal(pkg.name).open = false">
 
         <h6>Confirm Package Removal?</h6>
       </ModalComponent>
 
       <div class="flex items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 p-6">
-        <ArchiveBoxIcon class="h-6 w-6 text-gray-400" :class="[pkg.synced ? 'text-green-500': '']" aria-hidden="true" />
-        <div class="text-sm font-medium leading-6 text-gray-900">{{ pkg.name }}:{{pkg.tag}}</div>
+        <ArchiveBoxIcon class="h-6 w-6 text-gray-400" :class="[pkg.sha ? 'text-green-500': '']" aria-hidden="true" />
+        <div class="text-sm font-medium leading-6 text-gray-900">{{ pkg.name }}</div>
         <Menu as="div" class="relative ml-auto">
           <MenuButton class="-m-2.5 block p-2.5 text-gray-400 hover:text-gray-500">
             <span class="sr-only">Open options</span>
@@ -77,7 +77,7 @@ function modal(id: number): PackageModal {
               <MenuItem v-slot="{ active }">
 
                 <a :class="[active ? 'bg-gray-50' : '', 'block px-3 py-1 text-sm leading-6 text-gray-900']">
-                  <router-link :to="'/packages/' + pkg.id + '/inspect'">
+                  <router-link :to="'/packages/' + pkg.name + '/inspect'">
                     <div class="text-sm font-semibold leading-6 text-gray-900">
                       Inspect
                     </div>
@@ -87,7 +87,7 @@ function modal(id: number): PackageModal {
 
               </MenuItem>
               <MenuItem v-slot="{ active }">
-                <a @click="modal(pkg.id).open = true" href="#" :class="[active ? 'bg-gray-50' : '', 'block px-3 py-1 text-sm leading-6 text-gray-900']">
+                <a @click="modal(pkg.name).open = true" href="#" :class="[active ? 'bg-gray-50' : '', 'block px-3 py-1 text-sm leading-6 text-gray-900']">
                   Delete
                   <span class="sr-only">, {{ pkg.name }}</span>
                 </a>
@@ -101,12 +101,13 @@ function modal(id: number): PackageModal {
           <dt class="text-gray-500">Name</dt>
           <dd class="text-gray-700">
             {{ pkg.name }}
+            {{}}
           </dd>
         </div>
         <div class="flex justify-between gap-x-4 py-3">
           <dt class="text-gray-500">Tag</dt>
           <dd class="flex items-start gap-x-2">
-            {{ pkg.tag }}
+            {{ pkg.sha }}
           </dd>
         </div>
       </dl>

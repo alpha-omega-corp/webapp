@@ -26,7 +26,14 @@ export default defineConfig(({mode}) => {
             open: true,
             cors: true,
             strictPort: true,
-         
+            proxy: {
+                '/api': {
+                    target: 'http://localhost:3000',
+                    changeOrigin: true,
+                    secure: false,
+                    rewrite: (path) => path.replace(/^\/api/, '')
+                }
+            },
             build: {
                 outDir: './dist',
                 assetsDir: './src',

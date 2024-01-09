@@ -8,11 +8,14 @@ import {createRouter, createWebHistory, NavigationGuardNext, RouteLocationNormal
 import 'highlight.js/styles/stackoverflow-light.css'
 import hljs from 'highlight.js/lib/core';
 import dockerfile from 'highlight.js/lib/languages/dockerfile';
+import makefile from 'highlight.js/lib/languages/makefile';
+
 import hljsVuePlugin from "@highlightjs/vue-plugin";
 import {VAceEditor} from 'vue3-ace-editor';
 import {Route} from "@assets/models/route";
 
 hljs.registerLanguage('dockerfile', dockerfile);
+hljs.registerLanguage('makefile', makefile);
 
 
 const router: Router = createRouter({

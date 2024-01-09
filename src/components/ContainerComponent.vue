@@ -12,11 +12,11 @@ const isRunning = ref(container.value.status === 'running')
 
 <template>
 
-  <div class="lg:col-start-3 lg:row-end-1 m-10">
+  <div>
     <h2 class="sr-only">Container</h2>
     <div class="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5">
-      <dl class="flex flex-wrap">
-        <div class="flex-auto pl-6 pt-6">
+      <div>
+        <div class="pl-6 pt-6">
           <dt class="text-sm font-semibold leading-6 text-gray-900">
             Container
           </dt>
@@ -59,17 +59,9 @@ const isRunning = ref(container.value.status === 'running')
             {{container.command}}
           </dd>
         </div>
-      </dl>
+      </div>
       <div class="mt-6 border-t border-gray-900/5 px-6 py-6">
-        <router-link
-                     :class="['text-gray-700 hover:text-indigo-600 hover:bg-gray-50', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']"
-                     :to="'/docker/container/' + container.id + '/logs'">
-          <div class="text-sm font-semibold leading-6 text-gray-900">
-            Inspect Logs
-            <span aria-hidden="true">&rarr;</span>
-          </div>
 
-        </router-link>
       </div>
     </div>
   </div>

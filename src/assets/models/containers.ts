@@ -9,24 +9,40 @@ interface Container {
 }
 
 interface SimplePackage {
-    id: number
-    tag: string
+    type: string
+    size: number
     name: string
-    synced: boolean
+    path: string
+    sha: string
+    gitUrl: string
+    htmlUrl: string
+    downloadUrl: string
 }
 
 interface Package {
-    id: number
-    tag: string
     name: string
-    dockerfile: string
-    makefile: string
-    synced: boolean
-    git: GithubPackage
-    imageName: string
+    files: PackageFile[]
+    containers: Container[]
+    versions: PackageVersion[]
 }
 
-interface GithubPackage {
+interface PackageVersion {
+    repoName: string
+    repoPath: string
+    repoSha: string
+    repoLink: string
+    versionId?: number
+    versionSha?: string
+    versionLink?: string
+    containers: Container[]
+}
+
+interface PackageFile {
+    name: string
+    content: string
+}
+
+interface GitPackage {
     id: number
     name: string
     type: string
@@ -53,16 +69,32 @@ interface GetPackagesResponse {
 }
 
 interface GetPackageResponse {
-    package: Package
+    versions: PackageVersion[]
+}
+
+interface GetPackageFileResponse {
+    content: string
+}
+
+interface GetPackageTagsResponse {
+    tags: PackageTag[]
+}
+
+interface PackageTag {
+
 }
 
 export type {
     Container,
     Package,
-    GithubPackage,
+    PackageTag,
+    PackageVersion,
+    GitPackage,
     SimplePackage,
     GetContainersResponse,
     GetContainerLogsResponse,
     GetPackagesResponse,
     GetPackageResponse,
+    GetPackageFileResponse,
+    GetPackageTagsResponse
 }

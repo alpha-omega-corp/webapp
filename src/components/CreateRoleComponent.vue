@@ -4,10 +4,11 @@ import ModalComponent from "@Components/ModalComponent.vue";
 import {PlusCircleIcon} from "@heroicons/vue/20/solid";
 import ButtonComponent from "@Components/ButtonComponent.vue";
 import {ref} from "vue";
+import InputComponent from "@Components/InputComponent.vue";
 
 
 const createRole = () => {
-  apiPost('/role', {
+  apiPost('role', {
     name: roleName.value
   })
       .then((res) => {
@@ -25,20 +26,20 @@ const roleName = ref<string>('')
 
 <template>
   <ButtonComponent
-      button-text="Role"
+      class="btn-light-purple"
+      text="Role"
       @click="createRoleModal = true">
     <PlusCircleIcon class="-ml-0.5 h-5 w-5" aria-hidden="true"/>
   </ButtonComponent>
 
   <ModalComponent
       type="create"
-      @submit="createRole"
+      button="Create"
       :open="createRoleModal"
-      @close-modal="createRoleModal = false"
-      submitButton="Create"
-      title="Create Role">
+      @close="createRoleModal = false"
+      @submit="createRole">
 
-    <input type="text" v-model="roleName" placeholder="Role Name"
-           class="border border-gray-300 rounded-md p-2 w-full">
+    <InputComponent placeholder="Role Name" v-model:value="roleName"/>
+
   </ModalComponent>
 </template>

@@ -1,9 +1,8 @@
 import {Route} from '@assets/models/route';
-import {HomeIcon, UserIcon, CloudIcon} from '@heroicons/vue/24/outline'
-import {ArchiveBoxIcon} from "@heroicons/vue/24/solid";
+import {HomeIcon, UserIcon, CloudIcon, Cog6ToothIcon, ArchiveBoxIcon} from '@heroicons/vue/24/outline'
 
 const resolveComponent = (component: string, dir?: string) => {
-    return () => dir === undefined
+    return (): Promise<unknown> => dir === undefined
         ? import(`@Views/${component}.vue`)
         : import(`@Views/${dir}/${component}.vue`)
 }
@@ -40,7 +39,7 @@ export const routes: Route[] = [
     },
     {
         service: 'packages',
-        path: '/packages/:id/inspect',
+        path: '/packages/:name/inspect',
         component: resolveComponent('PackagePage', 'packages')
     },
     {
@@ -50,11 +49,19 @@ export const routes: Route[] = [
     },
     {
         service: 'admin',
-        path: '/admin',
-        name: 'Admin',
+        path: '/admin/configs',
+        name: 'Configs',
+        icon: Cog6ToothIcon,
+        display: true,
+        component: resolveComponent('ConfigPage', 'admin')
+    },
+    {
+        service: 'admin',
+        path: '/admin/permissions',
+        name: 'Permissions',
         icon: UserIcon,
         display: true,
-        component: resolveComponent('ManagePage', 'admin')
+        component: resolveComponent('PermissionPage', 'admin')
     },
     {
         service: 'guest',

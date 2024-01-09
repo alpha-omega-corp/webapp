@@ -41,11 +41,14 @@ const assignRole = () => {
     </div>
 
 
-      <ButtonComponent
-          button-text="Assign"
-          @click="assignRole">
-        <AcademicCapIcon class="-ml-0.5 h-5 w-5" aria-hidden="true"/>
-      </ButtonComponent>
+      <div>
+        <ButtonComponent
+            class="btn-light-purple"
+            text="Assign"
+            @click="assignRole">
+          <AcademicCapIcon class="-ml-0.5 h-5 w-5" aria-hidden="true"/>
+        </ButtonComponent>
+      </div>
 
   </div>
 </template>

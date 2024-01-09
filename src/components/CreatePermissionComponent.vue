@@ -41,17 +41,18 @@ const createPerms = () => {
 <template>
 
   <ButtonComponent
-      button-text="Permissions"
+      class="btn-light-purple"
+      text="Permissions"
       @click="createPermsModal = true">
     <PlusCircleIcon class="-ml-0.5 h-5 w-5" aria-hidden="true"/>
   </ButtonComponent>
 
   <ModalComponent
       type="create"
-      @submit="createPerms"
       :open="createPermsModal"
-      @close-modal="createPermsModal = false"
-      submitButton="Create"
+      @close="createPermsModal = false"
+      @submit="createPerms"
+      button="Create"
       title="Create Role">
 
     <div class="flex gap-4">

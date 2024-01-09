@@ -20,11 +20,13 @@ apiGet<GetContainersResponse>('/containers')
 
 <template>
   <div>
-    <ul class="flex justify-around">
-      <li v-for="container in containers">
+
+    <div class="grid gap-4 grid-cols-2">
+      <template v-for="container in containers">
         <ContainerComponent :container="container"/>
-      </li>
-    </ul>
+      </template>
+    </div>
+
   </div>
 
 </template>

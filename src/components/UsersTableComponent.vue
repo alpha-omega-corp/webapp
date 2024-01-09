@@ -17,7 +17,7 @@ const users = ref<User[]>([])
 const modals = ref<UserModal[]>([])
 
 const updateTable = () => {
-  apiGet<GetUsersResponse >('/users')
+  apiGet<GetUsersResponse >('users')
       .then((res: AxiosResponse<GetUsersResponse>) => {
         users.value = res.data.users
         modals.value = users.value.map((user: User) => {
@@ -46,7 +46,7 @@ const updateUser = (id: number) => {
     roles: user.roles.filter((role: Role) => role.hasOwnProperty('active') && !role.active).map((role: Role) => role.id)
   }
 
-  apiPost('/user/' + user.id, data)
+  apiPost('user/' + user.id, data)
       .then((res) => {
         console.log(res)
       })

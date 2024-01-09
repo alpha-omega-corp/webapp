@@ -11,7 +11,7 @@ defineEmits(['selected'])
 const services = ref<Service[]>([])
 const selectedService = ref<Service>()
 
-apiGet<GetServicesResponse>('/permission/services')
+apiGet<GetServicesResponse>('permission/pkg')
     .then((res: AxiosResponse<GetServicesResponse>) => {
       services.value = res.data.services
       selectedService.value = {name: 'Unknown'} as Service
