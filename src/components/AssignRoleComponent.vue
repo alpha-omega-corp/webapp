@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 
-import RolesDropdownComponent from "@Components/RolesDropdownComponent.vue";
-import {AcademicCapIcon} from "@heroicons/vue/20/solid";
-import ButtonComponent from "@Components/ButtonComponent.vue";
-import UsersDropdownComponent from "@Components/UsersDropdownComponent.vue";
+import RolesDropdownComponent from "@components/RolesDropdownComponent.vue";
+import ButtonComponent from "@components/ButtonComponent.vue";
+import UsersDropdownComponent from "@components/UsersDropdownComponent.vue";
 import {ref} from "vue";
-import {Role, User} from "@assets/models/permissions";
-import {apiPost} from "@/axios";
+import {Role, User} from "@/models/permissions";
+import {apiPost} from "@/http";
+import {AcademicCapIcon} from "@heroicons/vue/20/solid";
+
 
 const selectedUser = ref<User>()
 const selectedRole = ref<Role>()
@@ -41,14 +42,14 @@ const assignRole = () => {
     </div>
 
 
-      <div>
-        <ButtonComponent
-            class="btn-light-purple"
-            text="Assign"
-            @click="assignRole">
-          <AcademicCapIcon class="-ml-0.5 h-5 w-5" aria-hidden="true"/>
-        </ButtonComponent>
-      </div>
+    <div>
+      <ButtonComponent
+          class="btn-light-purple"
+          text="Assign"
+          @click="assignRole">
+        <AcademicCapIcon aria-hidden="true" class="-ml-0.5 h-5 w-5"/>
+      </ButtonComponent>
+    </div>
 
   </div>
 </template>

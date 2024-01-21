@@ -1,11 +1,10 @@
 <script lang="ts" setup>
-import {apiPost} from "@/axios";
-import ModalComponent from "@Components/ModalComponent.vue";
-import {PlusCircleIcon} from "@heroicons/vue/20/solid";
-import ButtonComponent from "@Components/ButtonComponent.vue";
+import {apiPost} from "@/http";
 import {ref} from "vue";
-import InputComponent from "@Components/InputComponent.vue";
-
+import {PlusCircleIcon} from "@heroicons/vue/20/solid";
+import ButtonComponent from "@components/ButtonComponent.vue";
+import InputComponent from "@components/InputComponent.vue";
+import ModalComponent from "@components/ModalComponent.vue";
 
 const createRole = () => {
   apiPost('role', {
@@ -29,17 +28,17 @@ const roleName = ref<string>('')
       class="btn-light-purple"
       text="Role"
       @click="createRoleModal = true">
-    <PlusCircleIcon class="-ml-0.5 h-5 w-5" aria-hidden="true"/>
+    <PlusCircleIcon aria-hidden="true" class="-ml-0.5 h-5 w-5"/>
   </ButtonComponent>
 
   <ModalComponent
-      type="create"
-      button="Create"
       :open="createRoleModal"
+      button="Create"
+      type="create"
       @close="createRoleModal = false"
       @submit="createRole">
 
-    <InputComponent placeholder="Role Name" v-model:value="roleName"/>
+    <InputComponent v-model:value="roleName" placeholder="Role Name"/>
 
   </ModalComponent>
 </template>

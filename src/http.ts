@@ -1,13 +1,17 @@
 import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
-import {$host, environment} from "@/env.d";
-import {env} from "@headlessui/vue/dist/utils/env";
+import {environment} from "@/env.d";
 
+const request = (options?: AxiosRequestConfig, headers?: object) => {
+    const auth = (sessionStorage.getItem('token') ? {Authorization: `Bearer ${sessionStorage.getItem('token')}`} : {})
 
-const request = (options?: AxiosRequestConfig) => axios.create({
-    baseURL: $host,
-    headers: (sessionStorage.getItem('token') ? { Authorization: `Bearer ${sessionStorage.getItem('token')}` } : {}),
-    ...(options ? options : {}),
-});
+    return axios.create({
+        headers: {
+            ...auth,
+            ...(headers ? headers : {}),
+        },
+        ...(options ? options : {}),
+    });
+}
 
 function apiGet<T>(url: string, options?: AxiosRequestConfig): Promise<AxiosResponse<T, unknown>> {
     return request(options).get<T>(proxy(url))
@@ -22,16 +26,13 @@ function apiDelete<T>(url: string, options?: AxiosRequestConfig<T>): Promise<Axi
 }
 
 function apiPostFormData<T>(url: string, data: FormData, options?: AxiosRequestConfig<T>): Promise<AxiosResponse<T, unknown>> {
-    return request({
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        },
-        ...(options ? options : {}),
-    }).post<T>(url, data)
+    return request(options, {
+        'Content-Type': 'multipart/form-data',
+    }).post<T>(proxy(url), data)
 }
 
 function proxy(url: string): string {
-    return `${environment.VITE_PROXY_TARGET}${url}`
+    return `${environment.VITE_PROXY}${url}`
 }
 
 export {apiGet, apiPost, apiDelete, apiPostFormData}

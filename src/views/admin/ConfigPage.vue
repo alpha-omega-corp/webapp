@@ -1,42 +1,50 @@
 <script lang="ts" setup>
+import {ref} from "vue";
+import {apiDelete, apiGet, apiPost} from "@/http";
 
 import {AxiosResponse} from "axios";
-import {GetSecretContentResponse, GetSecretsResponse, Secret} from "@assets/models/config";
-import {apiDelete, apiGet, apiPost} from "@/axios";
-import {ref} from "vue";
-import SecretsTableComponent from "@Components/SecretsTableComponent.vue";
-import ModalComponent from "@Components/ModalComponent.vue";
-import InputComponent from "@Components/InputComponent.vue";
-import EditorComponent from "@Components/EditorComponent.vue";
-import {StatusResponse} from "@assets/models/request";
+import {GetSecretContentResponse, GetSecretsResponse, Secret} from "@models/config";
+import {StatusResponse} from "@models/response";
+import {VarType} from "@enums/environment";
+import {ModalType} from "@enums/modal";
 
-const createSecretName = ref<string>()
-const createSecretContent = ref<string>()
-const createSecretModal = ref<boolean>(false)
+import SecretsTableComponent from "@components/SecretsTableComponent.vue";
+import ModalComponent from "@components/ModalComponent.vue";
+import InputComponent from "@components/InputComponent.vue";
+import EditorComponent from "@components/EditorComponent.vue";
+import SecretsFilterComponent from "@components/SecretsFilterComponent.vue";
 
 const secret = ref<Secret>()
 const secrets = ref<Secret[]>([])
+const filteredSecrets = ref<Secret[]>([])
+const filterType = ref<string>(VarType.ALL)
+const createSecretModal = ref<boolean>(false)
+const deleteSecretModal = ref<boolean>(false)
+const editSecretModal = ref<boolean>(false)
+const createSecretName = ref<string>()
+const createSecretContent = ref<string>()
 
-const syncEnvironment = () => {
+function syncEnvironment(): void {
   apiPost<StatusResponse>('/github/secrets/sync', {})
       .then((res: AxiosResponse<StatusResponse>) => {
         console.log(res.data)
       }).catch((err: any) => {
     console.log(err)
   })
-
 }
 
-const getSecrets = () => {
+function getSecrets(): void {
   apiGet<GetSecretsResponse>('/github/secrets')
       .then((res: AxiosResponse<GetSecretsResponse>) => {
         secrets.value = res.data.secrets
+        filter()
+
       }).catch((err: any) => {
     console.log(err)
   })
 }
 
-const createSecret = () => {
+function createSecret(): void {
   apiPost<StatusResponse>('/github/secrets', {
     name: createSecretName.value,
     content: createSecretContent.value,
@@ -52,7 +60,7 @@ const createSecret = () => {
   })
 }
 
-const deleteSecret = () => {
+function deleteSecret(): void {
   if (secret.value) {
     apiDelete<StatusResponse>(`/github/secrets/${secret.value.name}`)
         .then((res: AxiosResponse<StatusResponse>) => {
@@ -64,86 +72,125 @@ const deleteSecret = () => {
       console.log(err)
     })
   }
-
 }
 
-const deleteSecretModal = ref<boolean>(false)
-const openDeleteSecret = (s: Secret) => {
-  secret.value = s
+const openDeleteSecret = (value: Secret) => {
+  secret.value = value
   deleteSecretModal.value = true
 }
 
-const editSecretModal = ref<boolean>(false)
-const openEditSecret = (s: Secret) => {
-  secret.value = s
-
-  apiGet<GetSecretContentResponse>(`/github/secrets/${s.name}`)
+const openEditSecret = (value: Secret) => {
+  secret.value = value
+  apiGet<GetSecretContentResponse>(`/github/secrets/${value.name}`)
       .then((res: AxiosResponse<GetSecretContentResponse>) => {
         createSecretContent.value = atob(res.data.content)
-        createSecretName.value = s.name
+        createSecretName.value = value.name
         editSecretModal.value = true
       }).catch((err: any) => {
     console.log(err)
   })
-
 }
+
+const filterSecrets = (type: string) => {
+  filterType.value = type
+  filter()
+}
+
+function filter() {
+  if (filterType.value === VarType.ALL) {
+    filteredSecrets.value = secrets.value
+    return
+  }
+
+  filteredSecrets.value = secrets.value.filter((secret: Secret) => {
+    return secret.name.startsWith(filterType.value.toUpperCase())
+  })
+}
+
+function search(event: Event): void {
+  const target = event.target as HTMLInputElement
+  const query = target.value.toLowerCase()
+
+  if (query.length === 0) {
+    filteredSecrets.value = secrets.value
+    filter()
+    return
+  }
+  filteredSecrets.value = filteredSecrets.value.filter((secret) => {
+    return secret.name.toLowerCase().includes(query)
+  })
+}
+
 
 getSecrets()
 </script>
 
-
 <template>
+  <SecretsFilterComponent @filter="filterSecrets"/>
 
   <SecretsTableComponent
-      :secrets="secrets"
+      :secrets="filteredSecrets"
       @sync:environment="syncEnvironment"
       @create:secret="createSecretModal = true"
       @delete:secret="openDeleteSecret"
-      @edit:secret="openEditSecret"/>
+      @edit:secret="openEditSecret">
 
+    <template v-slot:search>
+      <InputComponent
+          class="w-1/3"
+          placeholder="Search"
+          @input="search"/>
+    </template>
+
+  </SecretsTableComponent>
 
   <ModalComponent
-      type="create"
-      :open="createSecretModal"
+      :modal="ModalType.CREATE"
+      :show="createSecretModal"
       @close="createSecretModal = false"
       @submit="createSecret">
 
     <h6 class="mb-4">Config</h6>
-    <EditorComponent lang="yaml" name="editor" :content="''"
-                     @update:content="(c: string) => createSecretContent = c"/>
+    <EditorComponent
+        lang="yaml"
+        name="editor"
+        @update:content="(c: string) => createSecretContent = c"
+    />
 
     <InputComponent
+        v-model:value="createSecretName"
         label="Secret Name"
-        v-model:value="createSecretName"/>
-
+    />
   </ModalComponent>
 
   <ModalComponent
-      type="create"
-      :open="editSecretModal"
+      :modal="ModalType.UPDATE"
+      :show="editSecretModal"
       @close="editSecretModal = false"
       @submit="createSecret">
 
     <h6 class="mb-4">Config</h6>
-    <EditorComponent lang="yaml" name="editor" :content="createSecretContent"
-                     @update:content="(c: string) => createSecretContent = c"/>
+    <EditorComponent
+        :content="createSecretContent"
+        lang="yaml"
+        name="editor"
+        @update:content="(c: string) => createSecretContent = c"
+    />
 
     <InputComponent
+        v-model:value="createSecretName"
         label="Secret Name"
-        v-model:value="createSecretName"/>
-
+    />
   </ModalComponent>
 
   <ModalComponent
-      type="danger"
-      button="Delete"
-      :open="deleteSecretModal"
+      v-if="secret"
+      :modal="ModalType.DELETE"
+      :show="deleteSecretModal"
       @close="deleteSecretModal = false"
-      @submit="deleteSecret"
-      v-if="secret">
+      @submit="deleteSecret">
 
-    <h6 class="mb-4">Delete {{secret.name}}</h6>
-
+    <h6 class="mb-4">Delete {{ secret.name }}</h6>
   </ModalComponent>
 
 </template>

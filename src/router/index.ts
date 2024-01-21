@@ -1,78 +1,50 @@
-import {Route} from '@assets/models/route';
-import {HomeIcon, UserIcon, CloudIcon, Cog6ToothIcon, ArchiveBoxIcon} from '@heroicons/vue/24/outline'
+import {createRouter, createWebHistory, NavigationGuardNext, RouteLocationNormalized, Router} from "vue-router";
+import {routes} from "@router/routes";
+import {Route} from "@models/route";
 
-const resolveComponent = (component: string, dir?: string) => {
-    return (): Promise<unknown> => dir === undefined
-        ? import(`@Views/${component}.vue`)
-        : import(`@Views/${dir}/${component}.vue`)
+const index: Router = createRouter({
+    history: createWebHistory(),
+    routes,
+});
+
+const setGuestPermissions = () => {
+    sessionStorage.setItem('permissions', JSON.stringify({
+        'home.read': true,
+    }))
 }
 
-export const routes: Route[] = [
-    {
-        service: 'home',
-        path: '/',
-        name: 'Home',
-        icon: HomeIcon,
-        display: true,
-        component: resolveComponent('HomePage'),
-    },
-    {
-        service: 'docker',
-        path: '/docker',
-        name: 'Docker',
-        icon: CloudIcon,
-        display: true,
-        component: resolveComponent('DockerPage')
-    },
-    {
-        service: 'docker',
-        path: '/docker/container/:id/logs',
-        component: resolveComponent('ContainerLogsPage')
-    },
-    {
-        service: 'packages',
-        path: '/packages',
-        name: 'Packages',
-        icon: ArchiveBoxIcon,
-        display: true,
-        component: resolveComponent('ManagePage', 'packages')
-    },
-    {
-        service: 'packages',
-        path: '/packages/:name/inspect',
-        component: resolveComponent('PackagePage', 'packages')
-    },
-    {
-        service: 'packages',
-        path: '/packages/create',
-        component: resolveComponent('CreatePackagePage', 'packages')
-    },
-    {
-        service: 'admin',
-        path: '/admin/configs',
-        name: 'Configs',
-        icon: Cog6ToothIcon,
-        display: true,
-        component: resolveComponent('ConfigPage', 'admin')
-    },
-    {
-        service: 'admin',
-        path: '/admin/permissions',
-        name: 'Permissions',
-        icon: UserIcon,
-        display: true,
-        component: resolveComponent('PermissionPage', 'admin')
-    },
-    {
-        service: 'guest',
-        path: '/login',
-        name: 'Login',
-        component: resolveComponent('LoginPage')
-    },
-    {
-        service: 'guest',
-        path: '/register',
-        name: 'Register',
-        component: resolveComponent('RegisterPage')
-    },
-];
+const canUserAccess = (to: RouteLocationNormalized): boolean => {
+    const permString = sessionStorage.getItem('permissions')
+
+    if (permString) {
+        const permissions = JSON.parse(permString)
+        const filteredRoutes: Route[] = routes.filter((r: Route) => {
+            return r.path === to.path
+        })
+
+        const route: Route = filteredRoutes[0]
+
+        if (route) {
+            const service: string = route.service
+            if (service === 'guest') {
+                return true
+            }
+
+            const canAccess = permissions[`${service}.read`]
+            if (canAccess === undefined || !canAccess) {
+                return false
+            }
+        }
+    } else {
+        setGuestPermissions()
+    }
+    return true
+}
+
+index.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+    if (canUserAccess(to)) {
+        next()
+    }
+})
+
+export default index

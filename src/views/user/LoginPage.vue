@@ -2,11 +2,10 @@
 
 import {ref} from "vue";
 import {useRouter} from "vue-router";
-import {Authentication} from "@assets/models/authentication";
-import {createSession, useUserStore} from "@/stores/UserStore";
-import {apiGet, apiPost} from "@/axios";
+import {Authentication} from "@models/authentication";
+import {useUserStore} from "@stores/user";
+import {apiPost} from "@/http";
 import {AxiosResponse} from "axios";
-import {GetPermMatrixResponse} from "@assets/models/permissions";
 
 const email = ref<string>()
 const password = ref<string>()
@@ -14,21 +13,15 @@ const password = ref<string>()
 const router = useRouter()
 const userStore = useUserStore()
 
-const onSubmit = () => {
+function login() {
   apiPost<Authentication>('/login', {
     email: email.value,
     password: password.value
   }).then((res: AxiosResponse<Authentication>) => {
-    userStore.commit('login', res.data.token)
-
-    apiGet<GetPermMatrixResponse>(`/user/${res.data.user.id}/permissions`)
-        .then((permRes: AxiosResponse<GetPermMatrixResponse>) => {
-          createSession(res.data, permRes.data.matrix)
-          router.push('/')
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+    userStore.commit('login', res.data)
+    router.push('/')
+  }).catch((err) => {
+    console.log(err)
   })
 }
 
@@ -37,16 +30,14 @@ const onSubmit = () => {
 <template>
   <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-      <img alt="Alphomega" class="mx-auto h-64 w-auto" src="../assets/images/alphomega.png"/>
+      <img alt="Alphomega" class="mx-auto h-64 w-auto" src="../../assets/images/alphomega.png"/>
       <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
         Sign in to your account
       </h2>
     </div>
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-
-
-      <form class="space-y-6" @submit.prevent="onSubmit()">
+      <form class="space-y-6" @submit.prevent="login">
         <div>
           <label class="block text-sm font-medium leading-6 text-gray-900" for="email">Email address</label>
           <div class="mt-2">

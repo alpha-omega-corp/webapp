@@ -1,10 +1,9 @@
 <script lang="ts" setup>
-import {computed, ref} from "vue";
+import {ref} from "vue";
+import 'ace-builds/src-noconflict/theme-twilight';
 import 'ace-builds/src-noconflict/mode-dockerfile';
 import 'ace-builds/src-noconflict/mode-makefile';
 import 'ace-builds/src-noconflict/mode-yaml';
-
-import 'ace-builds/src-noconflict/theme-twilight';
 
 defineEmits(['update:content'])
 const props = defineProps<{
@@ -14,7 +13,7 @@ const props = defineProps<{
 }>()
 
 const editor = ref<AceAjax.Editor>()
-const contentValue = props.content
+const contentValue = props.content ? props.content : ''
 
 const initEditor = () => {
   editor.value = ace.edit(props.name);
@@ -22,16 +21,16 @@ const initEditor = () => {
 
 </script>
 
-<template  v-if="content">
-    <v-ace-editor
-        :id="name"
-        class="editor"
-        @init="initEditor"
-        @change="$emit('update:content', contentValue)"
-        v-model:value="contentValue"
-        theme="twilight"
-        :lang="lang"
-    />
+<template>
+  <v-ace-editor
+      :id="name"
+      v-model:value="contentValue"
+      :lang="lang"
+      class="editor"
+      theme="twilight"
+      @change="$emit('update:content', contentValue)"
+      @init="initEditor"
+  />
 </template>
 
 <style>

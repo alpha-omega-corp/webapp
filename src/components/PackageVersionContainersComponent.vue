@@ -1,16 +1,22 @@
 <script lang="ts" setup>
 
 
-import {apiDelete, apiGet, apiPost} from "@/axios";
-import {Container, GetContainersResponse, PackageVersion} from "@assets/models/containers";
+import {Container, GetContainerLogsResponse, GetContainersResponse, PackageVersion} from "@models/containers";
+import {StatusResponse} from "@models/response";
+import {NotificationType} from "@enums/notification";
 import {AxiosResponse} from "axios";
+
 import {ref} from "vue";
-import PackageContainerComponent from "@Components/PackageContainerComponent.vue";
-import ModalComponent from "@Components/ModalComponent.vue";
-import {StatusResponse} from "@assets/models/request";
+import {apiDelete, apiGet, apiPost} from "@/http";
+import {useNotificationStore} from "@stores/notification";
+
+import ButtonComponent from "@components/ButtonComponent.vue";
+import InputComponent from "@components/InputComponent.vue";
+import ModalComponent from "@components/ModalComponent.vue";
+import PackageContainerComponent from "@components/PackageContainerComponent.vue";
 import {ArchiveBoxIcon} from "@heroicons/vue/20/solid";
-import ButtonComponent from "@Components/ButtonComponent.vue";
-import InputComponent from "@Components/InputComponent.vue";
+import {ModalType} from "@enums/modal";
+
 
 const props = defineProps<{
   name: string,
@@ -21,21 +27,23 @@ const containers = ref<Container[]>([])
 const container = ref<Container>()
 const createContainerModal = ref<boolean>(false)
 const deleteContainerModal = ref<boolean>(false)
+const containerLogsModal = ref<boolean>(false)
+const containerLogs = ref<string>()
+const $notification = useNotificationStore()
 
 const getContainers = () => {
   apiGet<GetContainersResponse>(`/docker/packages/${props.name}/containers/${props.version.repoName}`)
       .then((res: AxiosResponse<GetContainersResponse>) => {
         containers.value = res.data.containers
-        console.log(containers.value)
       }).catch((err: any) => {
-    console.log(err)
+
   })
 }
 
 const createContainerName = ref<string>()
 const createContainer = () => {
   if (createContainerName.value) {
-    apiPost<StatusResponse>(`/docker/packages/${props.name}/container/${props.version.repoName}`, {
+    apiPost<StatusResponse>(`/docker/packages/${props.name}/containers/${props.version.repoName}`, {
       containerName: createContainerName.value,
     })
         .then((res: AxiosResponse<StatusResponse>) => {
@@ -45,7 +53,7 @@ const createContainer = () => {
           }
         })
         .catch((err) => {
-          console.log(err)
+
         })
   }
 }
@@ -59,7 +67,43 @@ const deleteContainer = () => {
             getContainers()
           }
         }).catch((err: any) => {
-      console.log(err)
+
+    })
+  }
+}
+
+const startContainer = (id: string) => {
+  apiPost<StatusResponse>(`/docker/containers/${id}/start`, {})
+      .then((res: AxiosResponse<StatusResponse>) => {
+        if (res.data.status === 200) {
+          $notification.dispatch(NotificationType.SUCCESS, 'Container started')
+              .then(() => getContainers())
+        }
+      })
+      .catch((err) => {
+
+      })
+}
+
+const stopContainer = (id: string) => {
+  apiPost<StatusResponse>(`/docker/containers/${id}/stop`, {})
+      .then((res: AxiosResponse<StatusResponse>) => {
+        if (res.data.status === 200) {
+          $notification.dispatch(NotificationType.SUCCESS, 'Container stopped').then(() => getContainers())
+        }
+      })
+      .catch((err) => {
+
+      })
+}
+
+const getContainerLogs = () => {
+  if (container.value) {
+    apiGet<GetContainerLogsResponse>(`/docker/containers/${container.value.id}/logs`)
+        .then((res: AxiosResponse<GetContainerLogsResponse>) => {
+          containerLogs.value = res.data.logs
+        }).catch((err: any) => {
+
     })
   }
 }
@@ -69,48 +113,70 @@ const openDeleteContainer = (c: Container) => {
   deleteContainerModal.value = true
 }
 
+const openContainerLogs = (c: Container) => {
+  container.value = c
+  getContainerLogs()
+  containerLogsModal.value = true
+}
+
+
 getContainers()
 </script>
 
 
 <template>
   <div>
-    <ButtonComponent
-        class="btn-light-purple w-full mb-4"
-        text="Container"
-        @click="createContainerModal = true">
-      <ArchiveBoxIcon class="-ml-0.5 h-5 w-5" aria-hidden="true"/>
-    </ButtonComponent>
+
+    <div class="flex gap-2 mt-2 mb-4">
+      <ButtonComponent
+          class="btn-light-purple"
+          text="Container"
+          @click="createContainerModal = true">
+        <ArchiveBoxIcon aria-hidden="true" class="-ml-0.5 h-5 w-5"/>
+      </ButtonComponent>
+
+      <slot name="actions"></slot>
+    </div>
 
     <template v-for="container in containers">
       <div class="border border-gray-300 p-4 mb-2">
         <PackageContainerComponent
             :container="container"
-            @delete:container="openDeleteContainer"/>
+            @delete:container="openDeleteContainer"
+            @start:container="startContainer"
+            @stop:container="stopContainer"
+            @get:logs="openContainerLogs"/>
       </div>
     </template>
 
     <ModalComponent
-        type="create"
-        :open="createContainerModal"
-        @submit="createContainer"
-        @close="createContainerModal = false">
+        :modal="ModalType.CREATE"
+        :show="containerLogsModal"
+        @close="containerLogsModal = false"
+        @submit="undefined">
 
-      <InputComponent
-          label="Name"
-          hint="Container Name"
-          v-model:value="createContainerName"
-      />
-
+      <pre>{{ containerLogs }}</pre>
     </ModalComponent>
 
     <ModalComponent
-        type="danger"
-        :open="deleteContainerModal"
-        @submit="deleteContainer"
+        :modal="ModalType.CREATE"
+        :show="createContainerModal"
+        @close="createContainerModal = false"
+        @submit="createContainer">
+
+      <InputComponent
+          v-model:value="createContainerName"
+          hint="Container Name"
+          label="Name"/>
+    </ModalComponent>
+
+    <ModalComponent
+        v-if="container"
+        :modal="ModalType.DELETE"
+        :show="deleteContainerModal"
         @close="deleteContainerModal = false"
-        v-if="container">
-      <h6>Delete {{container.names}}</h6>
+        @submit="deleteContainer">
+      <h6>Delete {{ container.names }}</h6>
     </ModalComponent>
 
   </div>

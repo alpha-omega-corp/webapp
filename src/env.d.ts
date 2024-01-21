@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-import {Environment} from "@assets/models/environment";
+import {Environment} from "@models/environment";
 
 export function getCookies() {
     const documentCookies = Object.create({})
@@ -15,7 +15,4 @@ export function getCookies() {
 }
 
 export const environment: Environment = import.meta.env
-
-export const $title: string = environment.VITE_APP_TITLE
-export const $host: string = environment.VITE_API_URL
-
+export const $orgName: string = environment.VITE_ORG

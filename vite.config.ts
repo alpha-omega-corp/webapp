@@ -5,20 +5,27 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 
+function destination(path: string): string {
+    return fileURLToPath(new URL(`./${path}`, import.meta.url))
+}
+
 export default defineConfig(({mode}) => {
     process.env = {...process.env, ...loadEnv(mode, process.cwd())};
 
     return {
         plugins: [vue()],
         logLevel: 'info',
-        base: './',
         resolve: {
             alias: [
-                {find: '@', replacement: fileURLToPath(new URL('./src', import.meta.url))},
-                {find: '@Components', replacement: fileURLToPath(new URL('./src/components', import.meta.url))},
-                {find: '@Views', replacement: fileURLToPath(new URL('./src/views', import.meta.url))},
-                {find: '@assets', replacement: fileURLToPath(new URL('./src/assets', import.meta.url))},
-                {find: '@stores', replacement: fileURLToPath(new URL('./src/stores', import.meta.url))},
+                {find: '@', replacement: destination('src')},
+                {find: '@assets', replacement: destination('src/assets')},
+                {find: '@components', replacement: destination('src/components')},
+                {find: '@directives', replacement: destination('src/directives')},
+                {find: '@enums', replacement: destination('src/enums')},
+                {find: '@models', replacement: destination('src/models')},
+                {find: '@router', replacement: destination('src/router')},
+                {find: '@stores', replacement: destination('src/stores')},
+                {find: '@views', replacement: destination('src/views')},
             ]
         },
         server: {

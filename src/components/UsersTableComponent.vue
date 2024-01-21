@@ -1,12 +1,14 @@
 <script lang="ts" setup>
 
 import {ref} from "vue";
-import {apiGet, apiPost} from "@/axios.js";
+import {apiGet, apiPost} from "@/http";
 import {AxiosResponse} from "axios";
-import ModalComponent from "@Components/ModalComponent.vue";
-import InputComponent from "@Components/InputComponent.vue";
-import {GetUsersResponse, Role, User} from "@assets/models/permissions";
-import RoleBadgeComponent from "@Components/RoleBadgeComponent.vue";
+import ModalComponent from "@components/ModalComponent.vue";
+import InputComponent from "@components/InputComponent.vue";
+import {GetUsersResponse, Role, User} from "@/models/permissions";
+import RoleBadgeComponent from "@components/RoleBadgeComponent.vue";
+import ButtonComponent from "@components/ButtonComponent.vue";
+import {ModalType} from "@enums/modal";
 
 interface UserModal {
   id: number,
@@ -17,7 +19,7 @@ const users = ref<User[]>([])
 const modals = ref<UserModal[]>([])
 
 const updateTable = () => {
-  apiGet<GetUsersResponse >('users')
+  apiGet<GetUsersResponse>('users')
       .then((res: AxiosResponse<GetUsersResponse>) => {
         users.value = res.data.users
         modals.value = users.value.map((user: User) => {
@@ -69,10 +71,10 @@ updateTable()
           <table class="min-w-full divide-y divide-gray-300">
             <thead>
             <tr>
-              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Name</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Role</th>
-              <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+              <th class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0" scope="col">Name</th>
+              <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900" scope="col">Email</th>
+              <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900" scope="col">Role</th>
+              <th class="relative py-3.5 pl-3 pr-4 sm:pr-0" scope="col">
                 <span class="sr-only">Edit</span>
               </th>
             </tr>
@@ -81,25 +83,23 @@ updateTable()
             <tr v-for="user in users" :key="user.id">
 
               <ModalComponent
-                  type="create"
+                  :modal="ModalType.UPDATE"
+                  :show="modal(user.id).open"
+                  @close="modal(user.id).open = false"
                   @submit="updateUser(user.id)"
-                  :open="modal(user.id).open"
-                  @close-modal="modal(user.id).open = false"
-                  submitButton="Update"
-                  title="Create Role"
               >
 
                 <InputComponent
+                    v-model:value="user.name"
                     label="Name"
                     placeholder="Name"
-                    type="text"
-                    v-model:value="user.name"/>
+                    type="text"/>
 
                 <InputComponent
+                    v-model:value="user.email"
                     label="Email"
                     placeholder="Email"
-                    type="email"
-                    v-model:value="user.email"/>
+                    type="email"/>
 
 
                 <div class="mt-5">
@@ -115,7 +115,10 @@ updateTable()
                           </label>
                         </div>
                         <div class="ml-3 flex h-6 items-center">
-                          <input :id="`role-${role.id}`" name="roles[]" v-model="user.roles[idx].active" checked type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" />
+                          <input :id="`role-${role.id}`" v-model="user.roles[idx].active" checked
+                                 class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                 name="roles[]"
+                                 type="checkbox"/>
                         </div>
                       </div>
                     </div>
@@ -124,17 +127,25 @@ updateTable()
 
               </ModalComponent>
 
-              <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">{{ user.name }}</td>
-              <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">{{ user.email }}</td>
+              <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">{{
+                  user.name
+                }}
+              </td>
+              <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">{{
+                  user.email
+                }}
+              </td>
               <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                 <template v-for="role in user.roles">
 
-                   <RoleBadgeComponent :role="role.name"/>
+                  <RoleBadgeComponent :role="role.name"/>
 
                 </template>
               </td>
               <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                <a @click="modal(user.id).open = true" class="text-indigo-600 hover:text-indigo-900">
+                <ButtonComponent text="Edit" @click="modal(user.id).open = true">
+                </ButtonComponent>
+                <a class="text-indigo-600 hover:text-indigo-900">
                   <span>Edit</span>
                   <span class="sr-only">, {{ user.name }}</span>
                 </a>

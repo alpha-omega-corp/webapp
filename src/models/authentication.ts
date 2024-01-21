@@ -1,4 +1,4 @@
-import {User} from "@assets/models/permissions";
+import {User} from "@/models/permissions";
 
 interface Authentication {
     token: string

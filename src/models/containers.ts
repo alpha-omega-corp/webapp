@@ -35,6 +35,7 @@ interface PackageVersion {
     versionSha?: string
     versionLink?: string
     containers: Container[]
+    file?: string
 }
 
 interface PackageFile {
@@ -98,3 +99,4 @@ export type {
     GetPackageFileResponse,
     GetPackageTagsResponse
 }
+

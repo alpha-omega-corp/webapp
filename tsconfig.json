@@ -19,17 +19,29 @@
       "@/*": [
         "./src/*"
       ],
-      "@Components/*": [
-        "./src/components/*"
-      ],
-      "@Views/*": [
-        "./src/views/*"
-      ],
       "@assets/*": [
         "./src/assets/*"
       ],
-      "@store/*": [
-        "./src/store/*"
+      "@components/*": [
+        "./src/components/*"
+      ],
+      "@directives/*": [
+        "./src/directives/*"
+      ],
+      "@enums/*": [
+        "./src/enums/*"
+      ],
+      "@models/*": [
+        "./src/models/*"
+      ],
+      "@router/*": [
+        "./src/router/*"
+      ],
+      "@stores/*": [
+        "./src/stores/*"
+      ],
+      "@views/*": [
+        "./src/views/*"
       ]
     }
   },

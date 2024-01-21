@@ -1,72 +1,71 @@
 <script lang="ts" setup>
 import {useRoute} from "vue-router";
-import {apiDelete, apiGet, apiPost, apiPostFormData} from "@/axios";
-import {AxiosResponse} from "axios";
-import {
-  GetPackageFileResponse,
-  GetPackageResponse, GetPackageTagsResponse, PackageTag,
-  PackageVersion
-} from "@assets/models/containers";
 import {ref} from "vue";
-import EditorComponent from "@Components/EditorComponent.vue";
-import InputComponent from "@Components/InputComponent.vue";
-import ModalComponent from "@Components/ModalComponent.vue";
-import {StatusResponse} from "@assets/models/request";
-import PackageVersionsComponent from "@Components/PackageVersionsComponent.vue";
-import PackageVersionContainersComponent from "@Components/PackageVersionContainersComponent.vue";
+import {apiDelete, apiGet, apiPost, apiPostFormData} from "@/http";
+
+import {AxiosResponse} from "axios";
+import {StatusResponse} from "@/models/response";
+import {GetPackageFileResponse, GetPackageResponse, PackageVersion} from "@/models/containers";
+
+import EditorComponent from "@components/EditorComponent.vue";
+import InputComponent from "@components/InputComponent.vue";
+import ModalComponent from "@components/ModalComponent.vue";
+import PackageVersionsComponent from "@components/PackageVersionsComponent.vue";
+import {ModalType} from "@enums/modal";
 
 const route = useRoute();
-const packageName = route.params.name;
+const name: string = route.params.name as string;
 
-const packageVersion = ref<PackageVersion>()
 const versions = ref<PackageVersion[]>([])
-const tags = ref<PackageTag[]>([])
+const version = ref<PackageVersion>()
+
+const versionFileModal = ref<boolean>(false)
 const createContainerModal = ref<boolean>(false)
-const createContainerName = ref<string>()
-const openCreateContainer = (version: PackageVersion) => {
-  packageVersion.value = version
-  createContainerModal.value = true
-}
-
+const createVersionModal = ref<boolean>(false)
 const deleteVersionModal = ref<boolean>(false)
-const openDeleteVersion = (version: PackageVersion) => {
-  packageVersion.value = version
-  deleteVersionModal.value = true
-}
 
-const getPackageTags = () => {
-  apiGet<GetPackageTagsResponse>(`/docker/packages/${packageName}/tags`)
-      .then((res: AxiosResponse<GetPackageTagsResponse>) => {
-        tags.value = res.data.tags
-        console.log(tags.value)
+const createVersionTag = ref<string>()
+const createVersionFile = ref<string>()
+
+const getVersions = () => {
+  apiGet<GetPackageResponse>(`/github/packages/${name}`)
+      .then((res: AxiosResponse<GetPackageResponse>) => {
+        versions.value = res.data.versions
       }).catch((err: any) => {
     console.log(err)
   })
 }
 
-getPackageTags()
+const createVersion = () => {
+  if (createVersionTag.value && createVersionFile.value) {
+    const blob = new Blob([createVersionFile.value], {type: 'text/plain'});
+    const url = URL.createObjectURL(blob)
 
+    const formData = new FormData();
+    formData.append('tag', createVersionTag.value)
+    formData.append('content', blob, url);
 
-const file = ref<string>()
-const fetchContent = (path: string, name: string) => {
-  apiGet<GetPackageFileResponse>(`/docker/packages/${path}/${name}`)
-      .then((res: AxiosResponse<GetPackageFileResponse>) => {
-        file.value = atob(res.data.content)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    apiPostFormData<StatusResponse>(`/github/packages/${name}`, formData)
+        .then((res: AxiosResponse<StatusResponse>) => {
+          if (res.data.status === 201) {
+            createVersionModal.value = false
+            getVersions()
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+  }
 }
 
-
 const pushVersion = (tag: string, sha: string) => {
-  apiPost<StatusResponse>(`/docker/packages/${packageName}/push`, {
+  apiPost<StatusResponse>(`/github/packages/${name}/push`, {
     tag: tag,
     sha: sha
   })
       .then((res: AxiosResponse<StatusResponse>) => {
         if (res.data.status === 201) {
-          getPackageVersions()
+          getVersions()
         }
       })
       .catch((err) => {
@@ -74,14 +73,13 @@ const pushVersion = (tag: string, sha: string) => {
       })
 }
 
-
 const deleteVersion = () => {
-  if (packageVersion.value) {
-    apiDelete<StatusResponse>(`/docker/packages/${packageName}/${packageVersion.value.repoName}/${packageVersion.value.versionId}`)
+  if (version.value) {
+    apiDelete<StatusResponse>(`/github/packages/${name}/${version.value.repoName}/${version.value.versionId}`)
         .then((res: AxiosResponse<StatusResponse>) => {
           if (res.data.status === 200) {
             deleteVersionModal.value = false
-            getPackageVersions()
+            getVersions()
           }
         })
         .catch((err) => {
@@ -90,93 +88,76 @@ const deleteVersion = () => {
   }
 }
 
-
-const createVersionTag = ref<string>()
-const createVersionContent = ref<string>()
-const createVersionModal = ref<boolean>(false)
-
-const getPackageVersions = () => {
-  apiGet<GetPackageResponse>(`/docker/packages/${packageName}`)
-      .then((res: AxiosResponse<GetPackageResponse>) => {
-        versions.value = res.data.versions
-        console.log(versions.value)
-      }).catch((err: any) => {
-    console.log(err)
-  })
+const getVersionFile = (v: PackageVersion, file: string) => {
+  version.value = v
+  apiGet<GetPackageFileResponse>(`/github/packages/${v.repoPath}/${file}`)
+      .then((res: AxiosResponse<GetPackageFileResponse>) => {
+        if (version.value) {
+          version.value.file = atob(res.data.content)
+          versionFileModal.value = true
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
 }
 
-const createVersion = () => {
-  if (createVersionTag.value && createVersionContent.value) {
-    const blob = new Blob([createVersionContent.value], {type: 'text/plain'});
-    const url = URL.createObjectURL(blob)
-
-    const formData = new FormData();
-    formData.append('tag', createVersionTag.value)
-    formData.append('content', blob, url);
-
-    apiPostFormData<StatusResponse>(`/docker/packages/${packageName}`, formData)
-        .then((res: AxiosResponse<StatusResponse>) => {
-          if (res.data.status === 201) {
-            createVersionModal.value = false
-            getPackageVersions()
-          }
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-  }
+const openCreateContainer = (v: PackageVersion) => {
+  version.value = v
+  createContainerModal.value = true
 }
 
-getPackageVersions()
+const openDeleteVersion = (v: PackageVersion) => {
+  version.value = v
+  deleteVersionModal.value = true
+}
 
-
+getVersions()
 </script>
 
 <template>
-  <div class="flex">
-    <div>
-      <PackageVersionsComponent
-          :name="packageName"
-          :versions="versions"
-          @fetch:content="fetchContent"
-          @push:version="pushVersion"
-          @delete:version="openDeleteVersion"
-          @create:version="createVersionModal = true"
-          @create:container="openCreateContainer"/>
-    </div>
-
-    <div v-if="file" class="w-full">
-      <EditorComponent lang="dockerfile" name="dockerfileEditor" :content="file"/>
-    </div>
-  </div>
+  <PackageVersionsComponent
+      :name="name"
+      :versions="versions"
+      @get:file="getVersionFile"
+      @push:version="pushVersion"
+      @create:container="openCreateContainer"
+      @delete:version="openDeleteVersion"
+      @create:version="createVersionModal = true"
+  />
 
   <ModalComponent
-      type="create"
-      button="Push Package"
-      :open="createVersionModal"
+      :modal="ModalType.DISPLAY"
+      :show="versionFileModal"
+      @close="versionFileModal = false">
+
+    <h6 class="mb-4">Dockerfile</h6>
+    <EditorComponent :content="version?.file" lang="dockerfile" name="editor"/>
+  </ModalComponent>
+
+  <ModalComponent
+      :modal="ModalType.CREATE"
+      :show="createVersionModal"
       @close="createVersionModal = false"
       @submit="createVersion">
 
     <h6 class="mb-4">Dockerfile</h6>
-    <EditorComponent lang="dockerfile" name="editor" :content="''"
-                     @update:content="(c: string) => createVersionContent = c"/>
+    <EditorComponent :content="''" lang="dockerfile" name="editor"
+                     @update:content="(c: string) => createVersionFile = c"/>
 
     <InputComponent
-        label="Tag"
-        v-model:value="createVersionTag"/>
-
+        v-model:value="createVersionTag"
+        label="Tag"/>
   </ModalComponent>
 
   <ModalComponent
-      type="danger"
-      button="Delete"
-      :open="deleteVersionModal"
-      @submit="deleteVersion"
+      v-if="version"
+      :modal="ModalType.DELETE"
+      :show="deleteVersionModal"
       @close="deleteVersionModal = false"
-      v-if="packageVersion">
+      @submit="deleteVersion">
 
-    <h6>Delete {{ packageVersion.repoPath }}</h6>
-
+    <h6>Delete {{ version.repoPath }}</h6>
   </ModalComponent>
 
 
