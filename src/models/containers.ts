@@ -57,46 +57,11 @@ interface GitPackage {
     ownerType: string
 }
 
-interface GetContainersResponse {
-    containers: Container[]
-}
-
-interface GetContainerLogsResponse {
-    logs: string
-}
-
-interface GetPackagesResponse {
-    packages: SimplePackage[]
-}
-
-interface GetPackageResponse {
-    versions: PackageVersion[]
-}
-
-interface GetPackageFileResponse {
-    content: string
-}
-
-interface GetPackageTagsResponse {
-    tags: PackageTag[]
-}
-
-interface PackageTag {
-
-}
-
 export type {
     Container,
     Package,
-    PackageTag,
     PackageVersion,
     GitPackage,
     SimplePackage,
-    GetContainersResponse,
-    GetContainerLogsResponse,
-    GetPackagesResponse,
-    GetPackageResponse,
-    GetPackageFileResponse,
-    GetPackageTagsResponse
 }
 

@@ -1,19 +1,3 @@
-interface GetRolesResponse {
-    roles: Role[];
-}
-
-interface GetServicesResponse {
-    services: Service[];
-}
-
-interface GetPermissionsResponse {
-    permissions: Permission[];
-}
-
-interface GetPermMatrixResponse {
-    matrix: object;
-}
-
 interface Permission {
     id: number;
     service: Service;
@@ -39,9 +23,5 @@ export type {
     Permission,
     Role,
     Service,
-    GetUsersResponse,
-    GetRolesResponse,
-    GetServicesResponse,
-    GetPermissionsResponse,
-    GetPermMatrixResponse
+
 }

@@ -3,8 +3,8 @@ import {ref} from "vue";
 import {apiDelete, apiGet, apiPost} from "@/http";
 
 import {AxiosResponse} from "axios";
-import {GetSecretContentResponse, GetSecretsResponse, Secret} from "@models/config";
-import {StatusResponse} from "@models/response";
+import {Secret} from "@models/config";
+import {GetSecretContentResponse, GetSecretsResponse, StatusResponse} from "@models/response";
 import {VarType} from "@enums/environment";
 import {ModalType} from "@enums/modal";
 

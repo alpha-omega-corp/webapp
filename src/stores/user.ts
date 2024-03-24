@@ -15,11 +15,11 @@ export const user: Store<UserState> = createStore<UserState>({
         jwt: sessionStorage.getItem('token')
     },
     mutations: {
-        login(state: UserState, jwt: Authentication): void {
-            state.jwt = jwt.token
-            apiGet<GetPermMatrixResponse>(`/user/${jwt.user.id}/permissions`)
+        login(state: UserState, auth: Authentication): void {
+            state.jwt = auth.token
+            apiGet<GetPermMatrixResponse>(`/user/${auth.user.id}/permissions`)
                 .then((permRes: AxiosResponse<GetPermMatrixResponse>) => {
-                    createSession(jwt, permRes.data.matrix)
+                    createSession(auth, permRes.data.matrix)
                 })
                 .catch((err) => {
                     console.log(err)
@@ -31,15 +31,15 @@ export const user: Store<UserState> = createStore<UserState>({
     }
 })
 
-export const createSession = (data: Authentication, permMatrix: object): void => {
+export const createSession = (auth: Authentication, permMatrix: object): void => {
     let d: Date = new Date();
     d.setTime((d.getTime() + 1) * 24 * 60 * 60 * 1000);
     let expires: string = "expires=" + d.toUTCString();
 
-    document.cookie = "JWT-TOKEN=" + data.token + ";" + expires + ";path=/" + ";SameSite=None;Secure";
-    sessionStorage.setItem('user', JSON.stringify(data.user))
+    document.cookie = "ALPHOMEGA=" + auth.token + ";" + expires + ";path=/" + ";SameSite=None;Secure";
+    sessionStorage.setItem('user', JSON.stringify(auth.user))
     sessionStorage.setItem('permissions', JSON.stringify(permMatrix))
-    sessionStorage.setItem('token', data.token)
+    sessionStorage.setItem('token', auth.token)
 }
 
 const deleteSession = (state: UserState): void => {

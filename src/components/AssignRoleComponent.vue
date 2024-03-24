@@ -4,10 +4,10 @@ import RolesDropdownComponent from "@components/RolesDropdownComponent.vue";
 import ButtonComponent from "@components/ButtonComponent.vue";
 import UsersDropdownComponent from "@components/UsersDropdownComponent.vue";
 import {ref} from "vue";
-import {Role, User} from "@/models/permissions";
+import {Role} from "@/models/permissions";
 import {apiPost} from "@/http";
 import {AcademicCapIcon} from "@heroicons/vue/20/solid";
-
+import {User} from "@models/user";
 
 const selectedUser = ref<User>()
 const selectedRole = ref<Role>()

@@ -80,12 +80,6 @@ function login() {
       <div class="mt-2">
         No account? <a class="font-semibold text-indigo-600 hover:text-indigo-500" href="/register">Create one here</a>
       </div>
-
-
     </div>
   </div>
 </template>
-
-<style scoped>
-
-</style>

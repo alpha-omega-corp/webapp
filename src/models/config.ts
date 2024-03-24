@@ -5,12 +5,5 @@ interface Secret {
     visibility: boolean
 }
 
-interface GetSecretsResponse {
-    secrets: Secret[]
-}
 
-interface GetSecretContentResponse {
-    content: string
-}
-
-export type { Secret, GetSecretsResponse, GetSecretContentResponse }
+export type {Secret}

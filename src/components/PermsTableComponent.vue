@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import ServicesDropdownComponent from "@components/ServicesDropdownComponent.vue";
-import {GetPermissionsResponse, Permission, Service} from "@/models/permissions";
+import {Permission, Service} from "@/models/permissions";
 import {ref} from "vue";
 import {apiGet} from "@/http";
 import {AxiosResponse} from "axios";
 import RoleBadgeComponent from "@components/RoleBadgeComponent.vue";
 import CheckmarkComponent from "@components/CheckmarkComponent.vue";
+import {GetPermissionsResponse} from "@models/response";
 
 const selectedService = ref<Service>()
 const permissions = ref<Permission[]>([])

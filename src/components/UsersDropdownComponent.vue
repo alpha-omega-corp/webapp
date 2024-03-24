@@ -5,11 +5,12 @@ import {CheckIcon, ChevronUpDownIcon} from '@heroicons/vue/20/solid'
 import {Combobox, ComboboxButton, ComboboxInput, ComboboxLabel, ComboboxOption, ComboboxOptions,} from '@headlessui/vue'
 import {apiGet} from "@/http";
 import {AxiosResponse} from "axios";
-import {GetUsersResponse, User} from "@/models/permissions";
+import {GetUsersResponse} from "@models/response";
+import {User} from "@models/user";
 
 defineEmits(['selected'])
 
-const user = ref<User[]>([])
+const users = ref<User[]>([])
 apiGet<GetUsersResponse>('/users')
     .then((res: AxiosResponse<GetUsersResponse>) => {
       users.value = res.data.users

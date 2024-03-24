@@ -5,10 +5,12 @@ import {apiGet, apiPost} from "@/http";
 import {AxiosResponse} from "axios";
 import ModalComponent from "@components/ModalComponent.vue";
 import InputComponent from "@components/InputComponent.vue";
-import {GetUsersResponse, Role, User} from "@/models/permissions";
+import {Role} from "@/models/permissions";
 import RoleBadgeComponent from "@components/RoleBadgeComponent.vue";
 import ButtonComponent from "@components/ButtonComponent.vue";
 import {ModalType} from "@enums/modal";
+import {User} from "@models/user";
+import {GetUsersResponse} from "@models/response";
 
 interface UserModal {
   id: number,

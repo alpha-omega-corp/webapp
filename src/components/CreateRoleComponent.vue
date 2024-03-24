@@ -5,6 +5,7 @@ import {PlusCircleIcon} from "@heroicons/vue/20/solid";
 import ButtonComponent from "@components/ButtonComponent.vue";
 import InputComponent from "@components/InputComponent.vue";
 import ModalComponent from "@components/ModalComponent.vue";
+import {ModalType} from "@enums/modal";
 
 const createRole = () => {
   apiPost('role', {
@@ -32,9 +33,8 @@ const roleName = ref<string>('')
   </ButtonComponent>
 
   <ModalComponent
-      :open="createRoleModal"
-      button="Create"
-      type="create"
+      :modal="ModalType.CREATE"
+      :show="createRoleModal"
       @close="createRoleModal = false"
       @submit="createRole">
 

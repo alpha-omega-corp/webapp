@@ -3,8 +3,9 @@ import {ref} from 'vue'
 import {Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions} from '@headlessui/vue'
 import {CheckIcon, ChevronUpDownIcon} from '@heroicons/vue/20/solid'
 import {apiGet} from "@/http";
-import {GetRolesResponse, Role} from "@/models/permissions";
+import {Role} from "@/models/permissions";
 import {AxiosResponse} from "axios";
+import {GetRolesResponse} from "@models/response";
 
 defineEmits(['selected'])
 
