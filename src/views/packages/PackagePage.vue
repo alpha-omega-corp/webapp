@@ -4,7 +4,7 @@ import {ref} from "vue";
 import {apiDelete, apiGet, apiPost, apiPostFormData} from "@/http";
 
 import {AxiosResponse} from "axios";
-import {GetPackageResponse, StatusResponse} from "@/models/response";
+import {GetPackageFileResponse, GetPackageResponse, StatusResponse} from "@/models/response";
 import {PackageVersion} from "@/models/containers";
 
 import EditorComponent from "@components/EditorComponent.vue";

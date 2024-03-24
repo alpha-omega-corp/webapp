@@ -4,7 +4,7 @@ import {apiGet} from "@/http";
 import {InjectionKey} from 'vue'
 import {AxiosResponse} from "axios";
 import {Authentication} from "@/models/authentication";
-import {GetPermMatrixResponse} from "@/models/permissions";
+import {GetPermMatrixResponse} from "@/models/response";
 import {UserState} from "@models/user";
 
 
