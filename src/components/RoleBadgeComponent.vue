@@ -1,11 +1,15 @@
 <script lang="ts" setup>
 
 enum RoleEnum {
- Admin = 'admin', Moderator = 'moderator', Premium = 'premium', User = 'user',
+  Admin = 'admin',
+  Moderator = 'moderator',
+  Premium = 'premium',
+  Guest = 'guest',
+  Bot = 'bot'
 }
 
 const props = defineProps([
-    'role'
+  'role'
 ])
 
 function hasRole(role: string) {
@@ -14,8 +18,7 @@ function hasRole(role: string) {
 </script>
 
 <template>
-  <div class="m-2">
-
+  <div>
 
     <span
         v-show="hasRole(RoleEnum.Admin)"
@@ -36,10 +39,17 @@ function hasRole(role: string) {
     </span>
 
     <span
-        v-show="hasRole(RoleEnum.User)"
+        v-show="hasRole(RoleEnum.Guest)"
         class="role-badge bg-gray-50  text-gray-600  ring-gray-500/10">
-    User
+    Guest
   </span>
+
+    <span
+        v-show="hasRole(RoleEnum.Bot)"
+        class="role-badge bg-blue-50  text-blue-600  ring-blue-500/10">
+    Bot
+  </span>
+
   </div>
 
 </template>

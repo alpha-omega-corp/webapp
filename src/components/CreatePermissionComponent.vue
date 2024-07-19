@@ -7,7 +7,7 @@ import {PlusCircleIcon} from "@heroicons/vue/20/solid";
 import {ref} from "vue";
 import {Role, Service} from "@/models/permissions";
 import {apiPost} from "@/http";
-import {ModalType} from "@enums/modal";
+import {ActionType} from "@enums/action";
 
 const createPermsModal = ref<boolean>(false)
 
@@ -42,14 +42,14 @@ const createPerms = () => {
 <template>
 
   <ButtonComponent
-      class="btn-light-purple"
-      text="Permissions"
-      @click="createPermsModal = true">
-    <PlusCircleIcon aria-hidden="true" class="-ml-0.5 h-5 w-5"/>
-  </ButtonComponent>
+      text="Create Permission"
+      :action="ActionType.CREATE"
+      @click="createPermsModal = true"
+  />
 
   <ModalComponent
-      :modal="ModalType.CREATE"
+      title="Create Permission"
+      :modal="ActionType.CREATE"
       :show="createPermsModal"
       @close="createPermsModal = false"
       @submit="createPerms">
@@ -60,11 +60,10 @@ const createPerms = () => {
       </div>
       <div class="w-full">
         <RolesDropdownComponent @selected="selectRole"/>
-
       </div>
     </div>
 
-    <fieldset class="border-b border-t border-gray-200 mt-4">
+    <fieldset class="border-b border-t border-gray-200 mt-6">
       <legend class="sr-only">Permissions</legend>
       <div class="divide-y divide-gray-200">
         <div class="relative flex items-start pb-4 pt-3.5">

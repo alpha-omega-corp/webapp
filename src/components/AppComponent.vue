@@ -9,7 +9,6 @@ import {useRouter} from "vue-router";
 import {$orgName} from "@/env.d";
 
 const userStore = useUserStore()
-const index = useRouter()
 </script>
 
 <template>

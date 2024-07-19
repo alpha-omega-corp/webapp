@@ -1,8 +1,8 @@
-enum ModalType {
+enum ActionType {
     DISPLAY,
     CREATE,
     UPDATE,
     DELETE,
 }
 
-export {ModalType}
+export {ActionType}

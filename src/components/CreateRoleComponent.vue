@@ -1,14 +1,14 @@
 <script lang="ts" setup>
 import {apiPost} from "@/http";
 import {ref} from "vue";
-import {PlusCircleIcon} from "@heroicons/vue/20/solid";
 import ButtonComponent from "@components/ButtonComponent.vue";
 import InputComponent from "@components/InputComponent.vue";
 import ModalComponent from "@components/ModalComponent.vue";
-import {ModalType} from "@enums/modal";
+import {ActionType} from "@enums/action";
+import ColorPickerComponent from "@components/ColorPickerComponent.vue";
 
 const createRole = () => {
-  apiPost('role', {
+  apiPost('/role', {
     name: roleName.value
   })
       .then((res) => {
@@ -26,19 +26,24 @@ const roleName = ref<string>('')
 
 <template>
   <ButtonComponent
-      class="btn-light-purple"
-      text="Role"
-      @click="createRoleModal = true">
-    <PlusCircleIcon aria-hidden="true" class="-ml-0.5 h-5 w-5"/>
-  </ButtonComponent>
+      text="Create Role"
+      :action="ActionType.CREATE"
+      @click="createRoleModal = true"
+  />
 
   <ModalComponent
-      :modal="ModalType.CREATE"
+      :modal="ActionType.CREATE"
       :show="createRoleModal"
+      title="Create Role"
       @close="createRoleModal = false"
       @submit="createRole">
 
-    <InputComponent v-model:value="roleName" placeholder="Role Name"/>
+    <InputComponent
+        label="Name"
+        type="text"
+        v-model:value="roleName" placeholder="Role Name"/>
+
+    <ColorPickerComponent :label="roleName"/>
 
   </ModalComponent>
 </template>

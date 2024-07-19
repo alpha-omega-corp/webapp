@@ -4,7 +4,7 @@ import {apiDelete, apiGet, apiPost} from "@/http";
 import {AxiosResponse} from "axios";
 import {GetPackagesResponse, StatusResponse} from "@models/response";
 import {SimplePackage} from "@models/containers";
-import {ModalType} from "@enums/modal";
+import {ActionType} from "@enums/action";
 import {PlusCircleIcon} from "@heroicons/vue/20/solid";
 
 import PackageComponent from "@components/PackageComponent.vue";
@@ -94,7 +94,7 @@ getPackages()
   </div>
 
   <ModalComponent
-      :modal="ModalType.CREATE"
+      :modal="ActionType.CREATE"
       :show="createPackageModal"
       @close="createPackageModal = false"
       @submit="createPackage">
@@ -107,7 +107,7 @@ getPackages()
   </ModalComponent>
 
   <ModalComponent
-      :modal="ModalType.DELETE"
+      :modal="ActionType.DELETE"
       :show="deletePackageModal"
       @close="deletePackageModal = false"
       @submit="deletePackage">

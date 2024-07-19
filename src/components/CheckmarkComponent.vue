@@ -7,7 +7,7 @@ const props = defineProps([
 </script>
 
 <template>
-    <div class="flex items-center">
+    <div class="flex justify-center">
         <CheckCircleIcon
             v-show="props.checked"
             class="w-5 h-5 text-green-500"

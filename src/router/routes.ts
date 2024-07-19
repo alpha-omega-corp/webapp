@@ -42,7 +42,7 @@ export const routes: Route[] = [
         component: resolveComponent('PackagePage', 'packages')
     },
     {
-        service: 'admin',
+        service: 'user',
         path: '/admin/configs',
         name: 'Configs',
         icon: Cog6ToothIcon,
@@ -50,11 +50,11 @@ export const routes: Route[] = [
         component: resolveComponent('ConfigPage', 'admin')
     },
     {
-        service: 'admin',
+        service: 'user',
         path: '/admin/user',
         name: 'Permissions',
         icon: UserIcon,
         display: true,
-        component: resolveComponent('PermissionPage', 'admin')
+        component: resolveComponent('UserPage', 'admin')
     },
 ];

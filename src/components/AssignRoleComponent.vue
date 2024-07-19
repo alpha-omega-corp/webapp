@@ -8,7 +8,17 @@ import {Role} from "@/models/permissions";
 import {apiPost} from "@/http";
 import {AcademicCapIcon} from "@heroicons/vue/20/solid";
 import {User} from "@models/user";
+import {ActionType} from "@enums/action";
+import ModalComponent from "@components/ModalComponent.vue";
+import {NotificationType} from "@enums/notification";
+import {useNotificationStore} from "@stores/notification";
 
+const $notification = useNotificationStore()
+const emit = defineEmits([
+    'refresh'
+])
+
+const assignRoleModal = ref<boolean>(false)
 const selectedUser = ref<User>()
 const selectedRole = ref<Role>()
 
@@ -21,7 +31,8 @@ const assignRole = () => {
     role: selectedRole.value?.id
   })
       .then((res) => {
-        console.log(res)
+        assignRoleModal.value = false
+        $notification.dispatch(NotificationType.SUCCESS, res.statusText).then(() => emit('refresh'))
       })
       .catch((err) => {
         console.log(err)
@@ -31,25 +42,23 @@ const assignRole = () => {
 </script>
 
 <template>
-  <div class="flex justify-start gap-4">
 
-    <div class="w-2/5">
-      <RolesDropdownComponent @selected="selectRole"/>
-    </div>
+  <ButtonComponent
+      text="Assign Role"
+      :action="ActionType.CREATE"
+      @click="assignRoleModal = true"
+  />
 
-    <div class="w-2/5">
-      <UsersDropdownComponent @selected="selectUser"/>
-    </div>
+  <ModalComponent
+      title="Assign Role"
+      :modal="ActionType.CREATE"
+      :show="assignRoleModal"
+      @close="assignRoleModal = false"
+      @submit="assignRole">
 
+    <RolesDropdownComponent @selected="selectRole"/>
+    <UsersDropdownComponent @selected="selectUser"/>
 
-    <div>
-      <ButtonComponent
-          class="btn-light-purple"
-          text="Assign"
-          @click="assignRole">
-        <AcademicCapIcon aria-hidden="true" class="-ml-0.5 h-5 w-5"/>
-      </ButtonComponent>
-    </div>
+  </ModalComponent>
 
-  </div>
 </template>

@@ -19,6 +19,7 @@ export default defineConfig(({mode}) => {
             alias: [
                 {find: '@', replacement: destination('src')},
                 {find: '@assets', replacement: destination('src/assets')},
+                {find: '@icons', replacement: destination('src/icons')},
                 {find: '@components', replacement: destination('src/components')},
                 {find: '@directives', replacement: destination('src/directives')},
                 {find: '@enums', replacement: destination('src/enums')},

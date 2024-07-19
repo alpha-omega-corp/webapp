@@ -2,17 +2,25 @@
 import {ref} from "vue";
 import {useRouter} from "vue-router";
 import {apiPost} from "@/http";
+import {StatusResponse} from "@models/response";
+import {AxiosResponse} from "axios";
 
 const router = useRouter()
 
+const username = ref<string>()
 const email = ref<string>()
 const password = ref<string>()
 
 function onSubmit() {
-  apiPost<void>('/register', {
+  apiPost<StatusResponse>('/register', {
+    username: username.value,
     email: email.value,
     password: password.value
-  }).then(() => router.push('/login'))
+  }).then((res: AxiosResponse<StatusResponse>) => {
+    if (res.data.status === 201) {
+      router.push('/login')
+    }
+  })
 }
 
 </script>
@@ -28,6 +36,19 @@ function onSubmit() {
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
       <form class="space-y-6" @submit.prevent="onSubmit()">
 
+        <!-- Username -->
+        <div>
+          <label class="block text-sm font-medium leading-6 text-gray-900" for="email">Username</label>
+          <div class="mt-2">
+            <input
+                id="username"
+                v-model="username"
+                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                name="username"
+                type="text"/>
+          </div>
+        </div>
+        <!-- Email -->
         <div>
           <label class="block text-sm font-medium leading-6 text-gray-900" for="email">Email</label>
           <div class="mt-2">

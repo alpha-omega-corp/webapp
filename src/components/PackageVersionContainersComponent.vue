@@ -15,7 +15,7 @@ import InputComponent from "@components/InputComponent.vue";
 import ModalComponent from "@components/ModalComponent.vue";
 import PackageContainerComponent from "@components/PackageContainerComponent.vue";
 import {ArchiveBoxIcon} from "@heroicons/vue/20/solid";
-import {ModalType} from "@enums/modal";
+import {ActionType} from "@enums/action";
 
 
 const props = defineProps<{
@@ -150,7 +150,7 @@ getContainers()
     </template>
 
     <ModalComponent
-        :modal="ModalType.CREATE"
+        :modal="ActionType.CREATE"
         :show="containerLogsModal"
         @close="containerLogsModal = false"
         @submit="undefined">
@@ -159,7 +159,7 @@ getContainers()
     </ModalComponent>
 
     <ModalComponent
-        :modal="ModalType.CREATE"
+        :modal="ActionType.CREATE"
         :show="createContainerModal"
         @close="createContainerModal = false"
         @submit="createContainer">
@@ -172,7 +172,7 @@ getContainers()
 
     <ModalComponent
         v-if="container"
-        :modal="ModalType.DELETE"
+        :modal="ActionType.DELETE"
         :show="deleteContainerModal"
         @close="deleteContainerModal = false"
         @submit="deleteContainer">

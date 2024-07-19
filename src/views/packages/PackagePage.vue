@@ -11,7 +11,7 @@ import EditorComponent from "@components/EditorComponent.vue";
 import InputComponent from "@components/InputComponent.vue";
 import ModalComponent from "@components/ModalComponent.vue";
 import PackageVersionsComponent from "@components/PackageVersionsComponent.vue";
-import {ModalType} from "@enums/modal";
+import {ActionType} from "@enums/action";
 
 const route = useRoute();
 const name: string = route.params.name as string;
@@ -127,7 +127,7 @@ getVersions()
   />
 
   <ModalComponent
-      :modal="ModalType.DISPLAY"
+      :modal="ActionType.DISPLAY"
       :show="versionFileModal"
       @close="versionFileModal = false">
 
@@ -136,7 +136,7 @@ getVersions()
   </ModalComponent>
 
   <ModalComponent
-      :modal="ModalType.CREATE"
+      :modal="ActionType.CREATE"
       :show="createVersionModal"
       @close="createVersionModal = false"
       @submit="createVersion">
@@ -152,7 +152,7 @@ getVersions()
 
   <ModalComponent
       v-if="version"
-      :modal="ModalType.DELETE"
+      :modal="ActionType.DELETE"
       :show="deleteVersionModal"
       @close="deleteVersionModal = false"
       @submit="deleteVersion">

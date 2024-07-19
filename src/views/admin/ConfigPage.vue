@@ -6,7 +6,7 @@ import {AxiosResponse} from "axios";
 import {Secret} from "@models/config";
 import {GetSecretContentResponse, GetSecretsResponse, StatusResponse} from "@models/response";
 import {VarType} from "@enums/environment";
-import {ModalType} from "@enums/modal";
+import {ActionType} from "@enums/action";
 
 import SecretsTableComponent from "@components/SecretsTableComponent.vue";
 import ModalComponent from "@components/ModalComponent.vue";
@@ -145,7 +145,7 @@ getSecrets()
   </SecretsTableComponent>
 
   <ModalComponent
-      :modal="ModalType.CREATE"
+      :modal="ActionType.CREATE"
       :show="createSecretModal"
       @close="createSecretModal = false"
       @submit="createSecret">
@@ -164,7 +164,7 @@ getSecrets()
   </ModalComponent>
 
   <ModalComponent
-      :modal="ModalType.UPDATE"
+      :modal="ActionType.UPDATE"
       :show="editSecretModal"
       @close="editSecretModal = false"
       @submit="createSecret">
@@ -185,7 +185,7 @@ getSecrets()
 
   <ModalComponent
       v-if="secret"
-      :modal="ModalType.DELETE"
+      :modal="ActionType.DELETE"
       :show="deleteSecretModal"
       @close="deleteSecretModal = false"
       @submit="deleteSecret">

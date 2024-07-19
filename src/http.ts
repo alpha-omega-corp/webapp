@@ -21,6 +21,10 @@ function apiPost<T>(url: string, data: object, options?: AxiosRequestConfig<T>):
     return request(options).post<T>(proxy(url), data)
 }
 
+function apiPut<T>(url: string, data: object, options?: AxiosRequestConfig<T>): Promise<AxiosResponse<T, unknown>> {
+    return request(options).put<T>(proxy(url), data)
+}
+
 function apiDelete<T>(url: string, options?: AxiosRequestConfig<T>): Promise<AxiosResponse<T, unknown>> {
     return request(options).delete<T>(proxy(url), options)
 }
@@ -35,5 +39,5 @@ function proxy(url: string): string {
     return `${environment.VITE_PROXY}${url}`
 }
 
-export {apiGet, apiPost, apiDelete, apiPostFormData}
+export {apiGet, apiPost, apiPut, apiDelete, apiPostFormData}
 

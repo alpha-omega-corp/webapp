@@ -17,6 +17,7 @@ export const user: Store<UserState> = createStore<UserState>({
     mutations: {
         login(state: UserState, auth: Authentication): void {
             state.jwt = auth.token
+            console.log(auth.user)
             apiGet<GetPermMatrixResponse>(`/user/${auth.user.id}/permissions`)
                 .then((permRes: AxiosResponse<GetPermMatrixResponse>) => {
                     createSession(auth, permRes.data.matrix)
