@@ -11,7 +11,6 @@ interface GetUsersResponse {
     users: User[];
 }
 
-
 interface GetContainersResponse {
     containers: Container[]
 }

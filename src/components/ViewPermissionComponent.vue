@@ -6,32 +6,15 @@ import {apiGet} from "@/http";
 import {AxiosResponse} from "axios";
 import RoleBadgeComponent from "@components/RoleBadgeComponent.vue";
 import CheckmarkComponent from "@components/CheckmarkComponent.vue";
-import {GetPermissionsResponse, GetServicesResponse} from "@models/response";
-import {ActionType} from "@enums/action";
-import ModalComponent from "@components/ModalComponent.vue";
-import ButtonComponent from "@components/ButtonComponent.vue";
-import {EyeIcon} from "@heroicons/vue/20/solid";
+import {GetPermissionsResponse} from "@models/response";
 
-const viewPermissionModal = ref<boolean>(false)
 const selectedService = ref<Service>()
 const permissions = ref<Permission[]>([])
 
-const services = ref<Service[]>([])
-
-apiGet<GetServicesResponse>('permission/pkg')
-    .then((res: AxiosResponse<GetServicesResponse>) => {
-      services.value = res.data.services
-      selectedService.value = {name: 'Service'} as Service
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-
 const selectService = (service: Service) => {
   selectedService.value = service
-  console.log(service);
 
-  apiGet<GetPermissionsResponse>(`permission/${service.id}`)
+  apiGet<GetPermissionsResponse>(`/service/${service.id}/permissions`)
       .then((res: AxiosResponse<GetPermissionsResponse>) => {
         permissions.value = res.data.permissions
       })
@@ -44,25 +27,12 @@ const selectService = (service: Service) => {
 
 <template>
 
-  <ButtonComponent
-      text="View Permissions"
-      :action="ActionType.DISPLAY"
-      @click="viewPermissionModal = true">
-  </ButtonComponent>
-
-  <ModalComponent
-      title="View Permissions"
-      :modal="ActionType.CREATE"
-      :show="viewPermissionModal"
-      @close="viewPermissionModal = false"
-  >
-
   <ServicesDropdownComponent @selected="selectService"/>
 
     <div class="px-4 sm:px-6 lg:px-8">
-      <div class="mt-8 flow-root">
-        <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+      <div class="flow-root">
+        <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8 px-2">
+          <div class="inline-block min-w-full py-4 align-middle ">
             <table v-show="permissions.length > 0" class="min-w-full divide-y divide-gray-300">
               <thead>
               <tr>
@@ -94,7 +64,5 @@ const selectService = (service: Service) => {
         </div>
       </div>
     </div>
-
-  </ModalComponent>
 
 </template>

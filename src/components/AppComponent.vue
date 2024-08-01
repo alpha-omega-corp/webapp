@@ -5,7 +5,6 @@ import NavComponent from "@components/NavComponent.vue"
 import ProfileComponent from "@components/ProfileComponent.vue";
 import {useUserStore} from "@stores/user";
 import NotificationComponent from "@components/NotificationComponent.vue";
-import {useRouter} from "vue-router";
 import {$orgName} from "@/env.d";
 
 const userStore = useUserStore()
@@ -32,10 +31,8 @@ const userStore = useUserStore()
     </template>
 
     <template #main>
-      <main>
-        <div class="m-20">
-          <router-view/>
-        </div>
+      <main class="m-10">
+        <router-view />
 
         <NotificationComponent/>
       </main>

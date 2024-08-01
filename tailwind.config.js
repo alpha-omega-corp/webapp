@@ -23,6 +23,7 @@ export default {
         'btn-light-blue',
 
         'btn-icon-red',
-        'btn-icon-blue'
+        'btn-icon-blue',
+        'lg:grid-cols-2'
     ],
 }

@@ -12,9 +12,10 @@ defineEmits(['selected'])
 
 const services = ref<Service[]>([])
 
-apiGet<GetServicesResponse>('permission/pkg')
+apiGet<GetServicesResponse>('/services')
   .then((res: AxiosResponse<GetServicesResponse>) => {
     services.value = res.data.services
+    console.log(services.value)
   })
   .catch((err) => {
     console.log(err)

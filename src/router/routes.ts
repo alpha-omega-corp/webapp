@@ -28,6 +28,16 @@ export const routes: Route[] = [
         name: 'Register',
         component: resolveComponent('RegisterPage', 'user')
     },
+
+    {
+        service: 'docker',
+        path: '/docker',
+        name: 'Docker',
+        icon: ArchiveBoxIcon,
+        display: true,
+        component: resolveComponent('ImagePage', 'docker')
+    },
+
     {
         service: 'packages',
         path: '/packages',

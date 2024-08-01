@@ -33,7 +33,7 @@ const roleName = ref<string>('')
 
   <ModalComponent
       :modal="ActionType.CREATE"
-      :show="createRoleModal"
+      :show="createRoleModal "
       title="Create Role"
       @close="createRoleModal = false"
       @submit="createRole">

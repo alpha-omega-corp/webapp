@@ -17,11 +17,11 @@ defineProps<{
 </script>
 
 <template>
+
   <div class="flex w-full items-center justify-between space-x-6 p-6">
     <div class="flex-1 truncate">
       <div class="flex items-center space-x-3">
         <h3 class="truncate text-sm font-medium text-gray-900">{{ user.name }}</h3>
-
       </div>
       <p class="mt-1 truncate text-sm text-gray-500">{{ user.email }}</p>
     </div>
@@ -44,13 +44,12 @@ defineProps<{
 
 
   <div>
-    <div class="-mt-px flex divide-x divide-gray-200 overflow-y-scroll">
-      <div class="flex justify-between gap-2 w-0 flex-1 p-6">
-        <div class="flex gap-2">
+    <div class="-mt-px flex divide-x divide-gray-200">
+      <div class="flex justify-between gap-8 w-0 flex-1 p-6">
+
+        <div class="flex gap-2 overflow-y-scroll p-4">
           <template v-for="role in user.roles">
-
             <RoleBadgeComponent :role="role.name"/>
-
           </template>
         </div>
 

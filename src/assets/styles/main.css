@@ -10,7 +10,7 @@ body {
 @layer components {
 
     .role-badge {
-        @apply inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset;
+        @apply inline-flex rounded-full px-2 py-1 text-xs font-medium ring-1 ring-inset;
     }
 
     .package-version-card {

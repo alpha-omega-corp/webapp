@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import CreatePermissionComponent from "@components/CreatePermissionComponent.vue";
 import CreateRoleComponent from "@components/CreateRoleComponent.vue";
-import AssignRoleComponent from "@components/AssignRoleComponent.vue";
 import CreateServiceComponent from "@components/CreateServiceComponent.vue";
 import ViewPermissionComponent from "@components/ViewPermissionComponent.vue";
 import {apiDelete, apiGet, apiPost, apiPut} from "@/http";
@@ -18,9 +17,10 @@ import {useNotificationStore} from "@stores/notification";
 import InputComponent from "@components/InputComponent.vue";
 import CheckboxComponent from "@components/CheckboxComponent.vue";
 import {Role} from "@models/permissions";
+import GridComponent from "@components/GridComponent.vue";
+import GridCardComponent from "@components/GridCardComponent.vue";
 
 const $notification = useNotificationStore()
-
 const userRoles = ref<number[]>([])
 const roles = ref<Role[]>([])
 const users = ref<User[]>([])
@@ -120,33 +120,42 @@ getRoles()
 </script>
 
 <template>
-  <div class="flex gap-2 mb-4">
-    <CreateUserComponent @refresh="getUsers()"/>
-    <CreateServiceComponent/>
-    <CreateRoleComponent/>
-  </div>
 
-  <div class="flex gap-2">
-    <CreatePermissionComponent/>
-    <ViewPermissionComponent/>
-  </div>
+  <GridComponent columns="2">
 
-  <hr class="my-10">
+    <GridCardComponent title="Users">
+      <template #action>
+        <CreateUserComponent @refresh="getUsers()"/>
+      </template>
 
-  <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-    <li v-for="user in users" :key="user.id" class="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow">
-      <UserCardComponent
-          :user="user"
-          @delete:user="openDeleteUser"
-          @update:user="openUpdateUser"
-          @revoke:role="openAssignRole"
-      />
-    </li>
-  </ul>
+      <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <li v-for="user in users" :key="user.id" class="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow">
+          <UserCardComponent
+              :user="user"
+              @delete:user="openDeleteUser"
+              @update:user="openUpdateUser"
+              @revoke:role="openAssignRole"
+          />
+        </li>
+      </ul>
+    </GridCardComponent>
+
+    <GridCardComponent title="Services">
+      <template #action>
+        <div class="flex gap-4">
+          <CreateServiceComponent/>
+          <CreateRoleComponent/>
+          <CreatePermissionComponent/>
+        </div>
+      </template>
+
+      <ViewPermissionComponent/>
+    </GridCardComponent>
+
+  </GridComponent>
 
 
   <!-- Modals -->
-
   <ModalComponent
       v-if="user"
       title="Delete User"
