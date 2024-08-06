@@ -96,4 +96,20 @@ body {
     .btn-icon-blue {
         @apply text-blue-600 hover:text-blue-700;
     }
+
+    .btn-icon-create {
+        @apply text-green-500 hover:text-green-600;
+    }
+
+    .btn-create {
+        @apply btn bg-green-500 text-white hover:bg-green-600;
+    }
+
+    .btn-icon-delete {
+        @apply text-red-600 hover:text-red-500;
+    }
+
+    .btn-delete {
+        @apply btn bg-red-500 text-white hover:bg-red-600;
+    }
 }

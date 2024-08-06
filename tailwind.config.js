@@ -24,6 +24,11 @@ export default {
 
         'btn-icon-red',
         'btn-icon-blue',
-        'lg:grid-cols-2'
+        'lg:grid-cols-2',
+
+        'btn-icon-create',
+        'btn-create',
+        'btn-icon-delete',
+        'btn-delete',
     ],
 }

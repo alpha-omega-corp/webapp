@@ -5,7 +5,7 @@ import ButtonComponent from "@components/ButtonComponent.vue";
 import PackageVersionContainersComponent from "@components/PackageVersionContainersComponent.vue";
 
 defineEmits([
-  'get:file',
+  'get:editor',
   'push:version',
   'delete:version',
   'create:container',
@@ -45,7 +45,7 @@ const props = defineProps<{
                 <ButtonComponent
                     class="btn-light-cyan"
                     text="Dockerfile"
-                    @click="$emit('get:file', version, 'Dockerfile')">
+                    @click="$emit('get:editor', version, 'Dockerfile')">
                   <PaperClipIcon aria-hidden="true" class="-ml-0.5 h-5 w-5"/>
                 </ButtonComponent>
 

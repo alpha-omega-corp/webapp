@@ -13,6 +13,7 @@ import '@assets/styles/main.css'
 import 'highlight.js/styles/stackoverflow-light.css'
 
 import AppComponent from "@components/AppComponent.vue";
+import {editor, editorKey} from "@stores/editor";
 
 hljs.registerLanguage('dockerfile', dockerfile);
 hljs.registerLanguage('makefile', makefile);
@@ -23,8 +24,10 @@ createApp(AppComponent)
     .use(hljsVuePlugin)
     .use(user, userKey)
     .use(notification, notificationKey)
+    .use(editor, editorKey)
     .component('VAceEditor', VAceEditor)
     .mount('#app')
+
 
 
 

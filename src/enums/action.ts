@@ -1,8 +1,8 @@
 enum ActionType {
-    DISPLAY,
-    CREATE,
-    UPDATE,
-    DELETE,
+    DISPLAY = 'display',
+    CREATE = 'create',
+    UPDATE = 'update',
+    DELETE = 'delete',
 }
 
 export {ActionType}

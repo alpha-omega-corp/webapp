@@ -38,7 +38,7 @@ const props = defineProps<{
                 {{ props.title }}
               </DialogTitle>
 
-              <div style="min-height: 300px;" class="px-4 pb-4 pt-5 sm:p-6">
+              <div class="px-4 pb-4 pt-5 sm:p-6">
                 <slot></slot>
               </div>
 

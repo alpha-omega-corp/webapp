@@ -88,7 +88,7 @@ const deleteVersion = () => {
   }
 }
 
-const getVersionFile = (v: PackageVersion, file: string) => {
+const getVersionFile = (v: PackageVersion, editor: string) => {
   version.value = v
   apiGet<GetPackageFileResponse>(`/github/packages/${v.repoPath}/${file}`)
       .then((res: AxiosResponse<GetPackageFileResponse>) => {

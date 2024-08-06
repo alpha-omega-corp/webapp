@@ -4,10 +4,9 @@ import {ref} from "vue";
 import DeleteIcon from "@/icons/DeleteIcon.vue";
 import UpdateIcon from "@/icons/UpdateIcon.vue";
 import CreateIcon from "@/icons/CreateIcon.vue";
-import DisplayIcon from "@/icons/DisplayIcon.vue";
 
 interface Button {
-  action: ActionType
+  action?: ActionType
   text?: string
   submit?: boolean
   background?: boolean
@@ -21,24 +20,24 @@ const props = withDefaults(defineProps<Button>(), {
 
 const actionStyles = ref<string>('flex gap-2 items-center ')
 
-switch (props.action) {
-  case ActionType.DELETE:
-    setColor('red')
-    break
-  case ActionType.UPDATE:
-    setColor('blue')
-    break
-  case ActionType.CREATE:
-    setColor('orange')
-    break
-  case ActionType.DISPLAY:
-    setColor('cyan')
-    break
-}
+  switch (props.action) {
+    case ActionType.DELETE:
+      setColor('delete')
+      break
+    case ActionType.UPDATE:
+      setColor('update')
+      break
+    case ActionType.CREATE:
+      setColor('create')
+      break
+    case ActionType.DISPLAY:
+      setColor('display')
+      break
+  }
 
 function setColor(color: string) {
   if (props.background) {
-    actionStyles.value += `btn-light-${color}`
+    actionStyles.value += `btn-${color}`
   } else {
     actionStyles.value += `btn-icon-${color}`
   }
@@ -48,20 +47,18 @@ function setColor(color: string) {
 </script>
 
 <template>
-
   <!-- Action Buttons -->
   <button :type="submit ? 'submit' : 'button'" :class="actionStyles">
 
     <!-- Icons -->
-    <span v-if="!submit">
-      <DeleteIcon v-if="action == ActionType.DELETE"/>
-      <UpdateIcon v-if="action == ActionType.UPDATE"/>
-      <CreateIcon v-if="action == ActionType.CREATE"/>
-      <DisplayIcon v-if="action == ActionType.DISPLAY"/>
-    </span>
+    <span v-if="action">
+        <DeleteIcon v-if="action == ActionType.DELETE"/>
+        <UpdateIcon v-if="action == ActionType.UPDATE"/>
+        <CreateIcon v-if="action == ActionType.CREATE"/>
+      </span>
 
+    <slot/>
 
     <span v-if="text">{{ text }}</span>
   </button>
-
 </template>
