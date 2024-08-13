@@ -10,4 +10,4 @@ interface FileState {
     files: File[]
 }
 
-export type {File, FileState }
+export type {File, FileState}

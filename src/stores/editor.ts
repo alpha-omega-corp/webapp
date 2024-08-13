@@ -2,19 +2,20 @@ import {InjectionKey} from "vue";
 import {ActionContext, createStore, Store, useStore as baseUseStore} from "vuex";
 import {File, FileState} from "@models/file";
 
+const dockerFiles = [...Object.keys(localStorage)].filter((key: string) => key.includes('dockerfile'))
 
 export const editorKey: InjectionKey<Store<FileState>> = Symbol()
 
 export const editor: Store<FileState> = createStore<FileState>({
     state: {
-        items: [...Object.keys(localStorage)]
-            .filter((key: string) => key.includes('dockerfile'))
-            .map((key: string) => JSON.parse(localStorage.getItem(key) || '')).filter((item: File) => item.isOpen),
-        files: [...Object.keys(localStorage)]
-            .filter((key: string) => key.includes('dockerfile'))
+        items: dockerFiles
+            .map((key: string) => JSON.parse(localStorage.getItem(key) || ''))
+            .filter((item: File) => item.isOpen),
+        files: dockerFiles
             .map((key: string) => JSON.parse(localStorage.getItem(key) || '')),
-
     },
+
+
     mutations: {
         create(state: FileState, item: File): void {
             state.files.push(item)
@@ -53,11 +54,11 @@ export const editor: Store<FileState> = createStore<FileState>({
 
         delete(state: FileState, item: File): void {
             state.files.splice(state.files.indexOf(item), 1)
-            console.log(editor.getters.openFiles.indexOf(item.name))
             state.items.splice(editor.getters.openFiles.indexOf(item.name), 1)
             localStorage.removeItem(item.name)
         }
     },
+
 
     actions: {
         open(context: ActionContext<FileState, FileState>, item: File): void {
@@ -69,7 +70,7 @@ export const editor: Store<FileState> = createStore<FileState>({
         },
 
         select(context: ActionContext<FileState, FileState>, item: File): void {
-                context.commit('select', item)
+            context.commit('select', item)
         },
 
         close(context: ActionContext<FileState, FileState>, item: File): void {
@@ -92,13 +93,13 @@ export const editor: Store<FileState> = createStore<FileState>({
         }
     },
 
+
     getters: {
         items: (state: FileState) => state.items,
         files: (state: FileState) => state.files,
         selected: (state: FileState) => state.items.find((item: File) => item.isSelected),
         openFiles: (state: FileState) => state.items.filter((item: File) => item.isOpen).map((item: File) => item.name)
     },
-
 })
 
 export function useEditorStore(): Store<FileState> {

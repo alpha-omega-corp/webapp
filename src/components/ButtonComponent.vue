@@ -19,7 +19,6 @@ const props = withDefaults(defineProps<Button>(), {
 })
 
 const actionStyles = ref<string>('flex gap-2 items-center ')
-
   switch (props.action) {
     case ActionType.DELETE:
       setColor('delete')
@@ -41,9 +40,8 @@ function setColor(color: string) {
   } else {
     actionStyles.value += `btn-icon-${color}`
   }
-
-
 }
+
 </script>
 
 <template>

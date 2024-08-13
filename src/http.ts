@@ -39,15 +39,22 @@ function proxy(url: string): string {
     return `${environment.VITE_PROXY}${url}`
 }
 
-const newFormData = (data: any) => {
+const createFormData = (data: string): FormData => {
+    const formData = new FormData();
     const blob = new Blob([data], {type: 'text/plain'});
     const url = URL.createObjectURL(blob)
 
-    const formData = new FormData();
     formData.append('content', blob, url);
 
     return formData
 }
 
-export {apiGet, apiPost, apiPut, apiDelete, apiPostFormData, newFormData}
+export {
+    apiGet,
+    apiPost,
+    apiPut,
+    apiDelete,
+    apiPostFormData,
+    createFormData
+}
 
