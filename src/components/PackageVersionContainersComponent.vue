@@ -32,7 +32,7 @@ const containerLogs = ref<string>()
 const $notification = useNotificationStore()
 
 const getContainers = () => {
-  apiGet<GetContainersResponse>(`/docker/packages/${props.name}/containers/${props.version.repoName}`)
+  apiGet<GetContainersResponse>(`/docker/pkg/${props.name}/container/${props.version.repoName}`)
       .then((res: AxiosResponse<GetContainersResponse>) => {
         containers.value = res.data.containers
       }).catch((err: any) => {
@@ -41,9 +41,10 @@ const getContainers = () => {
 }
 
 const createContainerName = ref<string>()
+
 const createContainer = () => {
   if (createContainerName.value) {
-    apiPost<StatusResponse>(`/docker/packages/${props.name}/containers/${props.version.repoName}`, {
+    apiPost<StatusResponse>(`/docker/container/${props.name}/container/${props.version.repoName}`, {
       containerName: createContainerName.value,
     })
         .then((res: AxiosResponse<StatusResponse>) => {
@@ -53,7 +54,7 @@ const createContainer = () => {
           }
         })
         .catch((err) => {
-
+          console.log(err)
         })
   }
 }

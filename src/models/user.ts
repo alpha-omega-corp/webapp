@@ -10,6 +10,12 @@ interface User {
 
 interface UserState {
     jwt: string | null
+    user: User | null
 }
 
-export type {User, UserState}
+interface UserMachine {
+    id: number;
+    name: string;
+}
+
+export type {User, UserState, UserMachine};

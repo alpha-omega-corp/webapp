@@ -50,11 +50,9 @@ function createSecret(): void {
     content: createSecretContent.value,
   })
       .then((res: AxiosResponse<StatusResponse>) => {
-        if (res.data.status === 201) {
           createSecretModal.value = false
           editSecretModal.value = false
           getSecrets()
-        }
       }).catch((err: any) => {
     console.log(err)
   })
@@ -64,10 +62,8 @@ function deleteSecret(): void {
   if (secret.value) {
     apiDelete<StatusResponse>(`/github/secrets/${secret.value.name}`)
         .then((res: AxiosResponse<StatusResponse>) => {
-          if (res.data.status === 200) {
             deleteSecretModal.value = false
             getSecrets()
-          }
         }).catch((err: any) => {
       console.log(err)
     })
@@ -113,9 +109,9 @@ function search(event: Event): void {
 
   if (query.length === 0) {
     filteredSecrets.value = secrets.value
-    filter()
-    return
+    filter(); return
   }
+
   filteredSecrets.value = filteredSecrets.value.filter((secret) => {
     return secret.name.toLowerCase().includes(query)
   })

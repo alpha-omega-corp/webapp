@@ -19,9 +19,10 @@ const deletePackageModal = ref<boolean>(false)
 const createPackageName = ref<string>()
 
 const getPackages = () => {
-  apiGet<GetPackagesResponse>('/github/packages')
+  apiGet<GetPackagesResponse>('/github/containers')
       .then((res: AxiosResponse<GetPackagesResponse>) => {
         packages.value = res.data.packages
+        console.log(res)
       }).catch((err: any) => {
     console.log(err)
   })
@@ -29,7 +30,7 @@ const getPackages = () => {
 
 const createPackage = () => {
   if (createPackageName.value) {
-    apiPost<StatusResponse>('/github/packages', {
+    apiPost<StatusResponse>('/github/containers', {
       name: createPackageName.value
     })
         .then((res: AxiosResponse<StatusResponse>) => {
@@ -47,7 +48,7 @@ const createPackage = () => {
 
 const deletePackage = () => {
   if (pkg.value) {
-    apiDelete<StatusResponse>(`/github/packages/${pkg.value.name}`)
+    apiDelete<StatusResponse>(`/github/containers/${pkg.value.name}`)
         .then((res: AxiosResponse<StatusResponse>) => {
           if (res.data.status === 200) {
             deletePackageModal.value = false

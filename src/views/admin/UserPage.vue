@@ -31,8 +31,9 @@ const updateUserModal = ref<boolean>(false)
 const assignRoleModal = ref<boolean>(false)
 
 
+
 const getRoles = () => {
-  apiGet<GetRolesResponse>('/roles')
+  apiGet<GetRolesResponse>('/auth/roles')
       .then((res: AxiosResponse<GetRolesResponse>) => {
         roles.value = res.data.roles
       })
@@ -53,7 +54,7 @@ const getUsers = () => {
 
 const updateUser = () => {
   if (user.value) {
-    apiPut<StatusResponse>(`/user/${user.value.id}`, {
+    apiPut<StatusResponse>(`/users/${user.value.id}`, {
       name: user.value.name,
       email: user.value.email,
     })
@@ -71,7 +72,7 @@ const updateUser = () => {
 
 const deleteUser = () => {
   if (user.value) {
-    apiDelete<StatusResponse>(`/user/${user.value.id}`)
+    apiDelete<StatusResponse>(`/users/${user.value.id}`)
         .then((res: AxiosResponse<StatusResponse>) => {
           if (res.data.status === 200) {
             deleteUserModal.value = false
@@ -86,7 +87,7 @@ const deleteUser = () => {
 
 const assignRoles = () => {
   if (user.value) {
-    apiPost<StatusResponse>(`/user/assign`, {
+    apiPost<StatusResponse>(`/users/roles`, {
       userId: user.value.id,
       roles: userRoles.value
     })
@@ -198,7 +199,7 @@ getRoles()
     <CheckboxComponent
         name="roles"
         :items="roles"
-        :selected="user.roles ? user.roles.map((r) => r.id) : []"
+        :selected="user.roles ? user.roles.map((r: Role) => r.id) : []"
         @change="userRoles = $event"
     />
 

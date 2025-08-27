@@ -1,18 +1,16 @@
 <script lang="ts" setup>
 import {ref} from 'vue'
-import {Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions} from '@headlessui/vue'
-import {CheckIcon, ChevronUpDownIcon} from '@heroicons/vue/20/solid'
 import {apiGet} from "@/http";
-import {Role, Service} from "@/models/permissions";
+import {Service} from "@/models/permissions";
 import {AxiosResponse} from "axios";
-import {GetPermissionsResponse, GetServicesResponse} from "@models/response";
+import {GetServicesResponse} from "@models/response";
 import SelectComponent from "@components/SelectComponent.vue";
 
 defineEmits(['selected'])
 
 const services = ref<Service[]>([])
 
-apiGet<GetServicesResponse>('/services')
+apiGet<GetServicesResponse>('/auth/services')
   .then((res: AxiosResponse<GetServicesResponse>) => {
     services.value = res.data.services
     console.log(services.value)

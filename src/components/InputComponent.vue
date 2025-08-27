@@ -18,6 +18,7 @@ defineEmits(['update:value'])
     <div class="rounded-md px-3 pb-1.5 pt-2.5 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600 mb-3">
       <label :for="label" class="block text-xs font-medium text-gray-900">{{ label }}</label>
       <input
+          required
           :id="label"
           :aria-describedby="aria"
           placeholder="..."

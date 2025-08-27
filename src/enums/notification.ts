@@ -1,6 +1,7 @@
 enum NotificationType {
-    SUCCESS = 'success',
-    ERROR = 'error',
+    SUCCESS = '200',
+    UNAUTHORIZED = '401',
+    ERROR = '500',
     INFO = 'info',
     WARNING = 'warning'
 }

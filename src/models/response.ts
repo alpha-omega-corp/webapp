@@ -3,6 +3,12 @@ import {Container, PackageVersion, SimplePackage} from "@models/containers";
 import {Permission, Role, Service} from "@models/permissions";
 import {Secret} from "@models/config";
 
+
+interface Response {
+    status: number
+    error: string
+}
+
 interface StatusResponse {
     status: number
 }
@@ -55,7 +61,28 @@ interface GetSecretContentResponse {
     content: string
 }
 
+interface GetRepositoriesResponse {
+    items: Repository[];
+}
+
+interface Repository {
+    name: string;
+    full_name: string;
+    html_url: string;
+}
+
+interface GetCommitsResponse {
+    items: Commit[];
+}
+
+interface Commit {
+    sha: string;
+    html_url: string;
+    commit_message: string;
+}
+
 export type {
+    Response,
     StatusResponse,
     GetUsersResponse,
     GetContainersResponse,
@@ -68,5 +95,9 @@ export type {
     GetPermissionsResponse,
     GetPermMatrixResponse,
     GetSecretsResponse,
-    GetSecretContentResponse
+    GetSecretContentResponse,
+    GetRepositoriesResponse,
+    Repository,
+    GetCommitsResponse,
+    Commit,
 }

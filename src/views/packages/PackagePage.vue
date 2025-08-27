@@ -4,7 +4,7 @@ import {ref} from "vue";
 import {apiDelete, apiGet, apiPost, apiPostFormData} from "@/http";
 
 import {AxiosResponse} from "axios";
-import {GetPackageFileResponse, GetPackageResponse, StatusResponse} from "@/models/response";
+import {GetPackageFileResponse, GetPackageResponse, GetUsersResponse, StatusResponse} from "@/models/response";
 import {PackageVersion} from "@/models/containers";
 
 import EditorComponent from "@components/EditorComponent.vue";
@@ -28,7 +28,7 @@ const createVersionTag = ref<string>()
 const createVersionFile = ref<string>()
 
 const getVersions = () => {
-  apiGet<GetPackageResponse>(`/github/packages/${name}`)
+  apiGet<GetPackageResponse>(`/github/containers/${name}`)
       .then((res: AxiosResponse<GetPackageResponse>) => {
         versions.value = res.data.versions
       }).catch((err: any) => {
@@ -90,7 +90,7 @@ const deleteVersion = () => {
 
 const getVersionFile = (v: PackageVersion, editor: string) => {
   version.value = v
-  apiGet<GetPackageFileResponse>(`/github/packages/${v.repoPath}/${file}`)
+  apiGet<GetPackageFileResponse>(`/github/containers/${v.repoPath}/${file}`)
       .then((res: AxiosResponse<GetPackageFileResponse>) => {
         if (version.value) {
           version.value.file = atob(res.data.content)

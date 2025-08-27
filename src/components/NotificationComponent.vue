@@ -21,6 +21,8 @@ store.value.watch(
 
 const openNotification = () => {
   for (let i = 0; i < items.value.length; i++) {
+    console.log(items.value[i])
+
     setTimeout(() => {
       store.value.commit('remove', items.value[i])
     }, 4000 * (i + 1))
@@ -46,6 +48,9 @@ const openNotification = () => {
                 <div class="flex-shrink-0">
                   <span v-if="item.status === NotificationType.SUCCESS">
                     <CheckCircleIcon aria-hidden="true" class="h-6 w-6 text-green-400"/>
+                  </span>
+                  <span v-if="item.status === NotificationType.UNAUTHORIZED">
+                    <CheckCircleIcon aria-hidden="true" class="h-6 w-6 text-red-400"/>
                   </span>
                 </div>
                 <div class="ml-3 w-0 flex-1 pt-0.5">

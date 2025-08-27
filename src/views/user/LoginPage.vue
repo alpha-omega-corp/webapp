@@ -2,27 +2,29 @@
 
 import {ref} from "vue";
 import {useRouter} from "vue-router";
-import {Authentication} from "@models/authentication";
-import {useUserStore} from "@stores/user";
 import {apiPost} from "@/http";
+import {useUserStore} from "@stores/user";
+import {useNotificationStore} from "@stores/notification";
+import {Authentication} from "@models/authentication";
 import {AxiosResponse} from "axios";
+import InputComponent from "@components/InputComponent.vue";
+
+
+const router = useRouter()
+const $user = useUserStore()
+const $notification = useNotificationStore()
 
 const email = ref<string>()
 const password = ref<string>()
 
-const router = useRouter()
-const userStore = useUserStore()
-
 function login() {
-  apiPost<Authentication>('/login', {
+  apiPost<Authentication>('/auth/login', {
     email: email.value,
     password: password.value
   }).then((res: AxiosResponse<Authentication>) => {
-    userStore.commit('login', res.data)
+    $user.commit('login', res.data)
     router.push('/')
-  }).catch((err) => {
-    console.log(err)
-  })
+  }).catch((err: Error) => {$notification.dispatch('error', err)})
 }
 
 </script>
@@ -41,12 +43,12 @@ function login() {
         <div>
           <label class="block text-sm font-medium leading-6 text-gray-900" for="email">Email address</label>
           <div class="mt-2">
-            <input
+            <InputComponent
                 id="email"
-                v-model="email"
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                name="email"
-                type="email"/>
+                label="Email"
+                type="email"
+                v-model:value="email"/>
+
           </div>
         </div>
 
@@ -58,13 +60,11 @@ function login() {
             </div>
           </div>
           <div class="mt-2">
-            <input
+            <InputComponent
                 id="password"
-                v-model="password"
-                autocomplete="current-password"
-                class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                name="password"
-                type="password"/>
+                label="Name"
+                type="password"
+                v-model:value="password"/>
           </div>
         </div>
 

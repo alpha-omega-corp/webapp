@@ -9,7 +9,7 @@ const index: Router = createRouter({
 
 const setGuestPermissions = () => {
     sessionStorage.setItem('permissions', JSON.stringify({
-        'home.read': true,
+        'guest.read': true,
     }))
 }
 
@@ -38,6 +38,7 @@ const canUserAccess = (to: RouteLocationNormalized): boolean => {
     } else {
         setGuestPermissions()
     }
+
     return true
 }
 

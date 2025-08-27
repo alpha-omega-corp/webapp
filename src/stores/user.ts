@@ -11,13 +11,15 @@ export const userKey: InjectionKey<Store<UserState>> = Symbol()
 
 export const user: Store<UserState> = createStore<UserState>({
     state: {
-        jwt: sessionStorage.getItem('token')
+        jwt: sessionStorage.getItem('token'),
+        user: null,
     },
     mutations: {
         login(state: UserState, auth: Authentication): void {
             state.jwt = auth.token
+            state.user = auth.user
 
-            apiGet<GetPermMatrixResponse>(`/user/${auth.user.id}/permissions`)
+            apiGet<GetPermMatrixResponse>(`/users/${auth.user.id}/permissions`)
                 .then((permRes: AxiosResponse<GetPermMatrixResponse>) => {
                     createSession(auth, permRes.data.matrix)
                 })
@@ -28,6 +30,11 @@ export const user: Store<UserState> = createStore<UserState>({
         logout(state: UserState): void {
             deleteSession(state)
         },
+    },
+    getters: {
+        current(state) {
+            return state.user
+        }
     }
 })
 

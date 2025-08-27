@@ -1,6 +1,7 @@
 import {User} from "@models/user";
+import {Response} from "@models/response";
 
-interface Authentication {
+interface Authentication extends Response {
     token: string
     user: User
 }

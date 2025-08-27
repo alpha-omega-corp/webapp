@@ -9,7 +9,7 @@ const resolveComponent = (component: string, dir?: string) => {
 
 export const routes: Route[] = [
     {
-        service: 'home',
+        service: 'guest',
         path: '/',
         name: 'Home',
         icon: HomeIcon,
@@ -36,6 +36,24 @@ export const routes: Route[] = [
         icon: ArchiveBoxIcon,
         display: true,
         component: resolveComponent('ImagePage', 'docker')
+    },
+
+    {
+        service: 'user',
+        path: '/user/machines',
+        name: 'Machines',
+        icon: ArchiveBoxIcon,
+        display: true,
+        component: resolveComponent('MachinesPage', 'user')
+    },
+
+    {
+        service: 'user',
+        path: '/github/repositories',
+        name: 'Repositories',
+        icon: ArchiveBoxIcon,
+        display: true,
+        component: resolveComponent('RepositoriesPage', 'github')
     },
 
     {

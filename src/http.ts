@@ -1,5 +1,8 @@
 import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
 import {environment} from "@/env.d";
+import {useNotificationStore} from "@stores/notification";
+
+const $notification = useNotificationStore()
 
 const request = (options?: AxiosRequestConfig, headers?: object) => {
     const auth = (sessionStorage.getItem('token') ? {Authorization: `Bearer ${sessionStorage.getItem('token')}`} : {})
@@ -12,6 +15,8 @@ const request = (options?: AxiosRequestConfig, headers?: object) => {
         ...(options ? options : {}),
     });
 }
+
+
 
 function apiGet<T>(url: string, options?: AxiosRequestConfig): Promise<AxiosResponse<T, unknown>> {
     return request(options).get<T>(proxy(url))

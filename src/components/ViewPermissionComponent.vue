@@ -14,7 +14,7 @@ const permissions = ref<Permission[]>([])
 const selectService = (service: Service) => {
   selectedService.value = service
 
-  apiGet<GetPermissionsResponse>(`/service/${service.id}/permissions`)
+  apiGet<GetPermissionsResponse>(`/auth/services/${service.id}/permissions`)
       .then((res: AxiosResponse<GetPermissionsResponse>) => {
         permissions.value = res.data.permissions
       })

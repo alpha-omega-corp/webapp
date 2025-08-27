@@ -12,7 +12,7 @@ const email = ref<string>()
 const password = ref<string>()
 
 function onSubmit() {
-  apiPost<StatusResponse>('/register', {
+  apiPost<StatusResponse>('/auth/register', {
     username: username.value,
     email: email.value,
     password: password.value
